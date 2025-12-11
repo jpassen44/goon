@@ -114,6 +114,31 @@
       0 16px 40px rgba(37, 99, 235, 0.8);
   }
 
+  .download-btn {
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.85);
+    color: var(--text-main);
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.3);
+    transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  }
+
+  .download-btn:hover {
+    border-color: rgba(191, 219, 254, 0.75);
+    box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.75);
+    transform: translateY(-1px);
+  }
+
   /* INTRO */
   .intro {
     border-radius: 16px;
@@ -272,6 +297,132 @@
     padding: 2px;
     border: 1px solid rgba(148, 163, 184, 0.5);
     background: rgba(15, 23, 42, 0.9);
+  }
+
+  .prompt-palette {
+    margin-top: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(51, 65, 85, 0.9);
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.85));
+    padding: 10px 10px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prompt-palette-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .prompt-palette-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #e5e7eb;
+  }
+
+  .prompt-palette-subtext {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .prompt-category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .prompt-category {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: rgba(15, 23, 42, 0.8);
+    color: #cbd5f5;
+    font-size: 11px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+
+  .prompt-category:hover {
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: translateY(-1px);
+  }
+
+  .prompt-category.active {
+    border-color: rgba(56, 189, 248, 0.9);
+    background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 1));
+    color: #ecfeff;
+  }
+
+  .prompt-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 8px;
+  }
+
+  .prompt-pill {
+    border-radius: 10px;
+    border: 1px solid rgba(51, 65, 85, 0.95);
+    background: rgba(15, 23, 42, 0.75);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+  }
+
+  .prompt-pill:hover {
+    border-color: rgba(59, 130, 246, 0.7);
+    transform: translateY(-1px);
+  }
+
+  .prompt-pill.active {
+    border-color: rgba(56, 189, 248, 0.95);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+  }
+
+  .prompt-pill-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f8fafc;
+  }
+
+  .prompt-pill-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .ask-button {
+    border-radius: 10px;
+    border: 1px solid rgba(191, 219, 254, 0.8);
+    background: linear-gradient(120deg, #0ea5e9, #6366f1);
+    color: #f8fafc;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow:
+      0 0 0 1px rgba(37, 99, 235, 0.4),
+      0 14px 38px rgba(14, 165, 233, 0.55);
+    transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .ask-button:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(120deg, #0284c7, #4f46e5);
+    box-shadow:
+      0 0 0 1px rgba(191, 219, 254, 0.8),
+      0 16px 44px rgba(14, 165, 233, 0.65);
   }
 
   .console-tab {
@@ -774,6 +925,14 @@
           <span>See it in Action</span>
           <span class="icon">↗</span>
         </a>
+        <a
+          class="download-btn"
+          href="intro%20app%20v.7.html"
+          download
+        >
+          <span>Download demo HTML</span>
+          <span class="icon">⬇</span>
+        </a>
       </div>
     </header>
 
@@ -803,25 +962,37 @@
         <!-- CONSOLE -->
         <section class="console-card">
           <div class="console-header">
-            <div class="console-title">
-              <div class="console-dot-group">
-                <span class="console-dot"></span>
-                <span class="console-dot"></span>
-                <span class="console-dot blue"></span>
-              </div>
-              <span>Ask Sturdy</span>
+          <div class="console-title">
+            <div class="console-dot-group">
+              <span class="console-dot"></span>
+              <span class="console-dot"></span>
+              <span class="console-dot blue"></span>
             </div>
-            <div class="console-tabs">
-              <button class="console-tab active" data-script="0">Account review</button>
-              <button class="console-tab" data-script="1">QBR</button>
-              <button class="console-tab" data-script="2">Opportunity review</button>
-            </div>
+            <span>Ask Sturdy</span>
           </div>
+          <div class="console-tabs">
+            <button class="console-tab active" data-script="0">Account review</button>
+            <button class="console-tab" data-script="1">QBR</button>
+            <button class="console-tab" data-script="2">Opportunity review</button>
+          </div>
+        </div>
 
-          <div class="prompt-input">
-            <div class="prompt-input-icon">?</div>
-            <div class="prompt-input-text" id="promptText"></div>
-            <div class="prompt-input-tag">Ask anything</div>
+        <div class="prompt-palette">
+          <div class="prompt-palette-header">
+            <div>
+              <div class="prompt-palette-label">Prompt categories</div>
+              <div class="prompt-palette-subtext">Pick a Sturdy-style question, then press Ask.</div>
+            </div>
+            <button class="ask-button" id="askButton">Ask ➜</button>
+          </div>
+          <div class="prompt-category-list" id="promptCategories"></div>
+          <div class="prompt-list" id="promptList"></div>
+        </div>
+
+        <div class="prompt-input">
+          <div class="prompt-input-icon">?</div>
+          <div class="prompt-input-text" id="promptText"></div>
+          <div class="prompt-input-tag">Ask anything</div>
           </div>
 
           <div class="console-status">
@@ -1050,6 +1221,71 @@
     }
   ];
 
+  const promptLibrary = [
+    {
+      category: "Account Management",
+      prompts: [
+        {
+          title: "Account review: Secbase",
+          desc: "Full recap of goals, sentiment, risks, and actions.",
+          promptText: "What is going on with Secbase?",
+          scriptIndex: 0
+        },
+        {
+          title: "Executive readout: Secbase",
+          desc: "Prep me for the renewal deck with the highlights.",
+          promptText: "Prep me for the Secbase renewal review",
+          scriptIndex: 0
+        }
+      ]
+    },
+    {
+      category: "Growth",
+      prompts: [
+        {
+          title: "Opportunity review: Acme expansion",
+          desc: "Deal risks, stakeholders, and recommended moves.",
+          promptText: "Give me an opportunity review for the Acme expansion",
+          scriptIndex: 2
+        },
+        {
+          title: "Pipeline unblocker",
+          desc: "Where is Acme stuck and how do we unstick it?",
+          promptText: "Where is the Acme expansion slowing down and what should we do?",
+          scriptIndex: 2
+        }
+      ]
+    },
+    {
+      category: "CX",
+      prompts: [
+        {
+          title: "QBR: Chainwork",
+          desc: "Storyline, metrics, blockers, and a ready-to-run agenda.",
+          promptText: "Create a QBR for Chainwork",
+          scriptIndex: 1
+        },
+        {
+          title: "Sentiment sweep",
+          desc: "What sentiment trends should we address before the renewal?",
+          promptText: "Show me the sentiment patterns for Chainwork this quarter",
+          scriptIndex: 1
+        }
+      ]
+    },
+    {
+      category: "Product",
+      prompts: [
+        {
+          title: "Roadmap evidence",
+          desc: "Show the evidence behind the Secbase feature asks.",
+          promptText: "Show me the evidence behind the Secbase feature asks",
+          scriptIndex: 0
+        }
+      ]
+    }
+  ];
+
   const promptTextEl = document.getElementById("promptText");
   const statusTextEl = document.getElementById("statusText");
   const statusSpinnerEl = document.getElementById("statusSpinner");
@@ -1057,6 +1293,10 @@
   const insightHeaderLabelEl = document.getElementById("insightHeaderLabel");
   const insightBadgesEl = document.getElementById("insightBadges");
   const insightListEl = document.getElementById("insightList");
+
+  const promptCategoriesEl = document.getElementById("promptCategories");
+  const promptListEl = document.getElementById("promptList");
+  const askButtonEl = document.getElementById("askButton");
 
   const emailSliderEl = document.getElementById("emailSlider");
   const emailSliderMetaEl = document.getElementById("emailSliderMeta");
@@ -1066,6 +1306,9 @@
 
   let demoTimeouts = [];
   let currentScriptIndex = 0;
+  let activeCategoryIndex = 0;
+  let selectedPromptKey = "0-0";
+  let selectedPrompt = null;
 
   function clearDemoTimers() {
     demoTimeouts.forEach(id => clearTimeout(id));
@@ -1164,7 +1407,70 @@
     });
   }
 
-  function runScript(scriptIndex, autoLoop = true) {
+  function findPromptForScript(scriptIndex) {
+    for (let c = 0; c < promptLibrary.length; c++) {
+      const promptIndex = (promptLibrary[c].prompts || []).findIndex(p => p.scriptIndex === scriptIndex);
+      if (promptIndex !== -1) {
+        return {
+          categoryIndex: c,
+          promptIndex,
+          prompt: promptLibrary[c].prompts[promptIndex]
+        };
+      }
+    }
+    return null;
+  }
+
+  function renderPromptCategories() {
+    if (!promptCategoriesEl) return;
+    promptCategoriesEl.innerHTML = "";
+
+    promptLibrary.forEach((cat, idx) => {
+      const btn = document.createElement("button");
+      btn.className = `prompt-category${idx === activeCategoryIndex ? " active" : ""}`;
+      btn.textContent = cat.category;
+      btn.addEventListener("click", () => selectCategory(idx));
+      promptCategoriesEl.appendChild(btn);
+    });
+  }
+
+  function renderPromptList() {
+    if (!promptListEl) return;
+    promptListEl.innerHTML = "";
+
+    const category = promptLibrary[activeCategoryIndex] || { prompts: [] };
+    (category.prompts || []).forEach((prompt, idx) => {
+      const card = document.createElement("div");
+      const key = `${activeCategoryIndex}-${idx}`;
+      card.className = `prompt-pill${key === selectedPromptKey ? " active" : ""}`;
+      card.innerHTML = `
+        <div class="prompt-pill-title">${prompt.title}</div>
+        <div class="prompt-pill-desc">${prompt.desc}</div>
+      `;
+      card.addEventListener("click", () => selectPrompt(activeCategoryIndex, idx));
+      promptListEl.appendChild(card);
+    });
+  }
+
+  function selectPrompt(categoryIndex, promptIndex) {
+    const prompt = promptLibrary[categoryIndex]?.prompts?.[promptIndex];
+    if (!prompt) return;
+    selectedPromptKey = `${categoryIndex}-${promptIndex}`;
+    selectedPrompt = prompt;
+    setPromptText(prompt.promptText || prompt.title);
+    setStatus("Waiting for your question…", false);
+    renderPromptCategories();
+    renderPromptList();
+  }
+
+  function selectCategory(idx) {
+    activeCategoryIndex = idx;
+    renderPromptCategories();
+    renderPromptList();
+    selectPrompt(idx, 0);
+  }
+
+  function runScript(scriptIndex, autoLoop = false, promptOverride = null) {
     clearDemoTimers();
     closeEmailSlider();
     const script = demoScripts[scriptIndex];
@@ -1174,7 +1480,7 @@
       tab.classList.toggle("active", Number(tab.dataset.script) === scriptIndex);
     });
 
-    setPromptText(script.prompt);
+    setPromptText(promptOverride || script.prompt);
     setStatus("Thinking across every customer and prospect conversation…", true);
     insightListEl.innerHTML = "";
     sourceChipsEl.innerHTML = "";
@@ -1205,12 +1511,34 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    renderPromptCategories();
+    renderPromptList();
+    selectPrompt(0, 0);
+
     document.querySelectorAll(".console-tab").forEach(tab => {
       tab.addEventListener("click", () => {
         const index = Number(tab.dataset.script);
-        runScript(index, false);
+        const mapping = findPromptForScript(index);
+
+        if (mapping) {
+          activeCategoryIndex = mapping.categoryIndex;
+          selectedPromptKey = `${mapping.categoryIndex}-${mapping.promptIndex}`;
+          selectedPrompt = mapping.prompt;
+          renderPromptCategories();
+          renderPromptList();
+          setPromptText(mapping.prompt.promptText || mapping.prompt.title);
+        }
+
+        runScript(index, false, mapping?.prompt?.promptText || mapping?.prompt?.title || null);
       });
     });
+
+    if (askButtonEl) {
+      askButtonEl.addEventListener("click", () => {
+        if (!selectedPrompt) return;
+        runScript(selectedPrompt.scriptIndex, false, selectedPrompt.promptText || selectedPrompt.title);
+      });
+    }
 
     if (emailSliderCloseEl) {
       emailSliderCloseEl.addEventListener("click", () => {
@@ -1218,6 +1546,9 @@
       });
     }
 
-    runScript(0, true);
+    const defaultPrompt = promptLibrary[0]?.prompts?.[0];
+    if (defaultPrompt) {
+      runScript(defaultPrompt.scriptIndex, false, defaultPrompt.promptText || defaultPrompt.title);
+    }
   });
 </script>
