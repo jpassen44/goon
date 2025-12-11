@@ -1,1142 +1,789 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Sturdy Intro App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      :root {
-        --bg: #f4f5fb;
-        --panel: #0b1021;
-        --border: rgba(15, 23, 42, 0.25);
-        --border-subtle: rgba(148, 163, 184, 0.4);
-        --pill: rgba(148, 163, 184, 0.16);
-        --text-main: #f9fafb;
-        --text-muted: #9ca3af;
-        --accent: #38bdf8;
-        --accent-soft: rgba(56, 189, 248, 0.1);
-        --accent-strong: #0ea5e9;
-        --accent-green: #22c55e;
-        --shadow-soft: 0 26px 80px rgba(15, 23, 42, 0.54);
-        --shadow-pill: 0 14px 40px rgba(56, 189, 248, 0.6);
-        --chip-bg: rgba(15, 23, 42, 0.85);
-        --chip-border: rgba(148, 163, 184, 0.6);
-        --bubble-bg: #f9fafb;
-        --bubble-border: rgba(148, 163, 184, 0.5);
-        --prompt-bg: rgba(15, 23, 42, 0.92);
-        --prompt-border: rgba(148, 163, 184, 0.5);
-      }
-
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        padding: 32px 16px 40px;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-          sans-serif;
-        background:
-          radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
-          radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.12), transparent 50%),
-          #020617;
-        color: var(--text-main);
-      }
-
-      .shell {
-        width: 100%;
-        max-width: 1120px;
-        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 60%),
-          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.06), transparent 55%), var(--bg);
-        border-radius: 32px;
-        border: 1px solid rgba(15, 23, 42, 0.16);
-        box-shadow:
-          0 30px 80px rgba(15, 23, 42, 0.35),
-          0 0 0 1px rgba(15, 23, 42, 0.06);
-        padding: 28px 28px 24px;
-      }
-
-      .shell-inner {
-        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 70%),
-          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.18), transparent 60%),
-          linear-gradient(135deg, #020617 0%, #020617 34%, #020617 100%);
-        border-radius: 24px;
-        padding: 24px;
-        border: 1px solid rgba(15, 23, 42, 0.7);
-      }
-
-      .header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        gap: 16px;
-      }
-
-      .app-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(148, 163, 184, 0.65);
-        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.6);
-      }
-
-      .app-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
-      }
-
-      .app-badge span {
-        font-size: 11px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-      }
-
-      .header-pill {
-        font-size: 12px;
-        color: var(--text-muted);
-      }
-
-      .header-pill span {
-        padding: 4px 9px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.5);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
-        gap: 24px;
-        background:
-          radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.3), transparent 55%),
-          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.25), transparent 60%),
-          radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.9), transparent 60%),
-          #020617;
-        border-radius: 24px;
-        border: 1px solid rgba(15, 23, 42, 0.9);
-        box-shadow:
-          0 24px 60px rgba(15, 23, 42, 0.85),
-          0 0 0 1px rgba(15, 23, 42, 0.9);
-        padding: 22px 22px 18px;
-      }
-
-      .hero-main {
-        padding: 4px 8px 4px 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .hero-title {
-        font-size: 28px;
-        line-height: 1.15;
-        letter-spacing: -0.03em;
-        margin: 0;
-      }
-
-      .hero-body {
-        font-size: 14px;
-        color: var(--text-muted);
-        max-width: 480px;
-      }
-
-      .hero-body a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      .hero-body a:hover {
-        text-decoration: underline;
-      }
-
-      .hero-cta-row {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-top: 8px;
-      }
-
-      .hero-video-wrapper {
-        position: relative;
-        margin-top: 12px;
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
-      }
-
-      .hero-video-wrapper iframe {
-        display: block;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-      }
-
-      .primary-cta-btn {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 9px 20px 9px 18px;
-        background: linear-gradient(135deg, #0ea5e9, #22c55e);
-        border-radius: 999px;
-        border: none;
-        cursor: pointer;
-        color: #0b1120;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        text-decoration: none;
-        box-shadow:
-          0 18px 40px rgba(56, 189, 248, 0.55),
-          0 0 0 1px rgba(8, 47, 73, 0.8);
-        transform-origin: center;
-        transition:
-          background 0.18s ease,
-          box-shadow 0.18s ease,
-          transform 0.12s ease;
-      }
-
-      .primary-cta-btn span.icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 17px;
-        height: 17px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.95);
-        color: var(--accent);
-        font-size: 12px;
-      }
-
-      .primary-cta-btn:hover {
-        background: linear-gradient(135deg, #38bdf8, #22c55e);
-        box-shadow:
-          0 24px 50px rgba(56, 189, 248, 0.65),
-          0 0 0 1px rgba(8, 47, 73, 0.9);
-        transform: translateY(-1px);
-      }
-
-      .primary-cta-btn:active {
-        transform: translateY(0) scale(0.985);
-        box-shadow:
-          0 18px 40px rgba(56, 189, 248, 0.55),
-          0 0 0 1px rgba(8, 47, 73, 0.9);
-      }
-
-      .hero-inline-hint {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
-
-      .hero-inline-hint strong {
-        color: rgba(248, 250, 252, 0.9);
-      }
-
-      .hero-aside {
-        position: relative;
-        border-radius: 18px;
-        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.28), transparent 50%),
-          radial-gradient(circle at 120% -20%, rgba(34, 197, 94, 0.4), transparent 45%),
-          rgba(15, 23, 42, 0.98);
-        border: 1px solid rgba(15, 23, 42, 0.9);
-        box-shadow:
-          0 20px 60px rgba(15, 23, 42, 0.9),
-          0 0 0 1px rgba(15, 23, 42, 0.9);
-        padding: 14px 14px 13px;
-        overflow: hidden;
-      }
-
-      .hero-aside-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-      }
-
-      .hero-aside-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 9px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.55);
-        font-size: 11px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: rgba(209, 213, 219, 0.9);
-      }
-
-      .hero-aside-pill-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 30% 30%, #facc15, #f97316);
-        box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35);
-      }
-
-      .hero-aside-label {
-        font-size: 11px;
-        color: rgba(148, 163, 184, 0.9);
-      }
-
-      .hero-aside-body {
-        font-size: 13px;
-        color: rgba(209, 213, 219, 0.95);
-        margin-bottom: 8px;
-      }
-
-      .hero-aside-body span {
-        display: block;
-      }
-
-      .hero-aside-footer {
-        font-size: 11px;
-        color: rgba(148, 163, 184, 0.9);
-      }
-
-      .hero-aside-footer span {
-        color: rgba(248, 250, 252, 0.85);
-      }
-
-      .hero-aside-orbit {
-        position: absolute;
-        inset: 8px 8px auto auto;
-        pointer-events: none;
-        opacity: 0.2;
-      }
-
-      .hero-aside-orbit-inner {
-        width: 68px;
-        height: 68px;
-        border-radius: 999px;
-        border: 1px dashed rgba(148, 163, 184, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .hero-aside-orbit-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
-      }
-
-      .hero-aside-orbit-inner::before,
-      .hero-aside-orbit-inner::after {
-        content: "";
-        position: absolute;
-        inset: -16px;
-        border-radius: inherit;
-        border: 1px dashed rgba(148, 163, 184, 0.35);
-      }
-
-      .hero-aside-orbit-inner::after {
-        inset: -30px;
-        border-style: solid;
-        border-color: rgba(56, 189, 248, 0.35);
-      }
-
-      .hero-aside::after {
-        content: "";
-        position: absolute;
-        inset: 22px;
-        border-radius: 18px;
-        border: 1px solid rgba(15, 23, 42, 0.85);
-        pointer-events: none;
-      }
-
-      .main-panel {
-        margin-top: 18px;
-        background: #f9fafb;
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow:
-          0 18px 60px rgba(15, 23, 42, 0.18),
-          0 0 0 1px rgba(15, 23, 42, 0.04);
-        padding: 18px 18px 14px;
-        color: #0f172a;
-      }
-
-      .prompt-input-row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 14px;
-      }
-
-      .prompt-input-wrapper {
-        flex: 1 1 auto;
-        position: relative;
-      }
-
-      .prompt-input {
-        width: 100%;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.65);
-        padding: 10px 17px 10px 15px;
-        font-size: 13px;
-        color: #0f172a;
-        outline: none;
-        background:
-          radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.06), transparent 60%),
-          #f9fafb;
-      }
-
-      .prompt-input:focus {
-        border-color: var(--accent-strong);
-        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
-      }
-
-      .prompt-input-hint {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 11px;
-        color: #9ca3af;
-      }
-
-      .prompt-input-hint span {
-        padding: 3px 6px;
-        border-radius: 999px;
-        border: 1px solid #e5e7eb;
-        background: #f9fafb;
-        margin-left: 4px;
-      }
-
-      .ask-btn {
-        flex: 0 0 auto;
-        border-radius: 999px;
-        border: none;
-        padding: 9px 18px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        background: linear-gradient(135deg, #0ea5e9, #22c55e);
-        color: #0b1120;
-        box-shadow:
-          0 18px 44px rgba(56, 189, 248, 0.6),
-          0 0 0 1px rgba(8, 47, 73, 0.9);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        transform-origin: center;
-        transition:
-          transform 0.1s ease,
-          box-shadow 0.1s ease,
-          opacity 0.15s ease;
-      }
-
-      .ask-btn:hover:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow:
-          0 20px 54px rgba(56, 189, 248, 0.7),
-          0 0 0 1px rgba(8, 47, 73, 0.95);
-      }
-
-      .ask-btn:active:not(:disabled) {
-        transform: translateY(0) scale(0.985);
-        box-shadow:
-          0 18px 44px rgba(56, 189, 248, 0.62),
-          0 0 0 1px rgba(8, 47, 73, 0.95);
-      }
-
-      .ask-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        box-shadow: none;
-        background: linear-gradient(135deg, #0f172a, #020617);
-        color: #9ca3af;
-      }
-
-      .ask-btn-icon {
-        font-size: 12px;
-      }
-
-      .category-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 10px;
-      }
-
-      .tab-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 11px;
-        border-radius: 999px;
-        border: 1px solid #cbd5f5;
-        font-size: 12px;
-        color: #0f172a;
-        background: #f9fafb;
-        cursor: pointer;
-        transition:
-          background 0.12s ease,
-          box-shadow 0.12s ease,
-          transform 0.08s ease,
-          border-color 0.12s ease;
-      }
-
-      .tab-pill span.count {
-        font-size: 10px;
-        padding: 2px 7px;
-        border-radius: 999px;
-        background: #e5edff;
-        color: #1d4ed8;
-      }
-
-      .tab-pill:hover {
-        background: #e5edff;
-        border-color: #a5b4fc;
-        transform: translateY(-0.5px);
-      }
-
-      .tab-pill.active {
-        background: #0f172a;
-        color: #e5edff;
-        border-color: #1d4ed8;
-        box-shadow:
-          0 12px 28px rgba(15, 23, 42, 0.35),
-          0 0 0 1px rgba(30, 64, 175, 0.85);
-      }
-
-      .tab-pill.active span.count {
-        background: rgba(59, 130, 246, 0.2);
-        color: #bfdbfe;
-      }
-
-      .prompt-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 4px;
-      }
-
-      .prompt-card {
-        border-radius: 16px;
-        padding: 10px 13px 9px;
-        border: 1px solid rgba(148, 163, 184, 0.6);
-        background: rgba(249, 250, 251, 0.96);
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        cursor: pointer;
-        transition:
-          background 0.12s ease,
-          box-shadow 0.12s ease,
-          transform 0.08s ease,
-          border-color 0.12s ease;
-      }
-
-      .prompt-card:hover {
-        background: #f3f4ff;
-        border-color: #a5b4fc;
-        transform: translateY(-0.5px);
-        box-shadow: 0 14px 30px rgba(148, 163, 184, 0.4);
-      }
-
-      .prompt-card.selected {
-        background: #0f172a;
-        border-color: #1d4ed8;
-        box-shadow:
-          0 20px 36px rgba(15, 23, 42, 0.7),
-          0 0 0 1px rgba(30, 64, 175, 0.85);
-      }
-
-      .prompt-card-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: #0f172a;
-      }
-
-      .prompt-card.selected .prompt-card-title {
-        color: #e5edff;
-      }
-
-      .prompt-card-body {
-        font-size: 12px;
-        color: #4b5563;
-      }
-
-      .prompt-card.selected .prompt-card-body {
-        color: #e5e7eb;
-      }
-
-      .prompt-card-footer {
-        font-size: 11px;
-        color: #6b7280;
-      }
-
-      .prompt-card.selected .prompt-card-footer {
-        color: #9ca3af;
-      }
-
-      .prompt-meta-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-        color: #6b7280;
-        margin-top: 7px;
-      }
-
-      .prompt-meta-row span.em {
-        color: #1d4ed8;
-      }
-
-      .prompt-meta-row span.example {
-        color: #6b7280;
-      }
-
-      .thinking-row {
-        display: none;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: rgba(15, 23, 42, 0.96);
-        border: 1px solid rgba(148, 163, 184, 0.6);
-        margin-bottom: 10px;
-      }
-
-      .thinking-label {
-        font-size: 12px;
-        color: rgba(226, 232, 240, 0.98);
-      }
-
-      .thinking-dots {
-        display: inline-flex;
-        gap: 5px;
-        align-items: center;
-      }
-
-      .thinking-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
-        opacity: 0.2;
-        animation: thinking 1s infinite ease-in-out;
-      }
-
-      .thinking-dot:nth-child(2) {
-        animation-delay: 0.18s;
-      }
-
-      .thinking-dot:nth-child(3) {
-        animation-delay: 0.36s;
-      }
-
-      @keyframes thinking {
-        0%,
-        80%,
-        100% {
-          transform: translateY(0);
-          opacity: 0.15;
-        }
-        40% {
-          transform: translateY(-5px);
-          opacity: 1;
-        }
-      }
-
-      .result-shell {
-        display: none;
-        margin-top: 4px;
-      }
-
-      .result-bubble {
-        background: var(--bubble-bg);
-        border-radius: 18px;
-        border: 1px solid var(--bubble-border);
-        padding: 10px 12px;
-        display: flex;
-        gap: 10px;
-        font-size: 13px;
-        color: #0f172a;
-        box-shadow:
-          0 16px 30px rgba(148, 163, 184, 0.45),
-          0 0 0 1px rgba(148, 163, 184, 0.4);
-        max-height: 280px;
-        overflow-y: auto;
-      }
-
-      .result-avatar {
-        flex: 0 0 auto;
-        width: 26px;
-        height: 26px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 30% 0%, #22c55e, transparent 60%),
-          radial-gradient(circle at 80% 80%, #0ea5e9, transparent 60%),
-          #020617;
-        position: relative;
-        box-shadow:
-          0 0 0 1px rgba(15, 23, 42, 0.8),
-          0 0 0 4px rgba(148, 163, 184, 0.5);
-      }
-
-      .result-avatar::after {
-        content: "";
-        position: absolute;
-        inset: 6px;
-        border-radius: inherit;
-        border: 1px solid rgba(148, 163, 184, 0.9);
-        opacity: 0.8;
-      }
-
-      .result-body {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .result-header-line {
-        font-size: 11px;
-        color: #6b7280;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .result-header-line span.model {
-        color: #1d4ed8;
-        font-weight: 500;
-      }
-
-      .result-text {
-        white-space: pre-wrap;
-        line-height: 1.5;
-      }
-
-      .footer-row {
-        margin-top: 10px;
-        font-size: 11px;
-        color: #6b7280;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .footer-row span.em {
-        color: #1d4ed8;
-      }
-
-      .footer-row a {
-        color: #4b5563;
-        text-decoration: underline;
-      }
-
-      @media (max-width: 900px) {
-        body {
-          padding: 20px 12px 28px;
-        }
-
-        .shell {
-          padding: 20px 18px 20px;
-        }
-
-        .shell-inner {
-          padding: 16px 14px 16px;
-        }
-
-        .header-row {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 8px;
-        }
-
-        .hero {
-          grid-template-columns: minmax(0, 1fr);
-          padding: 16px 14px 14px;
-        }
-
-        .hero-main {
-          padding: 0;
-        }
-
-        .hero-cta-row {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .hero-aside {
-          margin-top: 6px;
-        }
-
-        .main-panel {
-          margin-top: 14px;
-          padding: 14px 12px 12px;
-        }
-
-        .prompt-input-row {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .ask-btn {
-          width: 100%;
-        }
-
-        .result-bubble {
-          max-height: 260px;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .hero-title {
-          font-size: 22px;
-        }
-
-        .hero-body {
-          font-size: 13px;
-        }
-
-        .prompt-card-title {
-          font-size: 12px;
-        }
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sturdy Ask Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="shell">
-      <div class="shell-inner">
-        <div class="header-row">
-          <div class="app-badge">
-            <div class="app-dot"></div>
-            <span>Sturdy Intro App</span>
-          </div>
-          <div class="header-pill">
-            <span>Early Preview</span>
-          </div>
-        </div>
-
-        <div class="hero">
-          <div class="hero-main">
-            <p class="hero-title">Ask for speed, get instant answers.</p>
-            <p class="hero-body">
-              This is an interactive prebuilt Sturdy scene: test prompts, see example answers.
-              <strong>For production integrations, drop this markup into your app and point to a real
-                Sturdy API.</strong>
+  <body class="bg-slate-100 text-slate-900">
+    <div class="min-h-screen flex flex-col items-center px-4 py-10">
+      <!-- 🔵 INTRO HERO CARD -->
+      <section class="w-full max-w-5xl mx-auto mt-4 mb-14 px-0">
+        <div
+          class="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-[0_18px_45px_rgba(15,23,42,0.55)] px-6 py-7 md:px-10 md:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+        >
+          <!-- Left: headline + body -->
+          <div class="space-y-4 md:max-w-xl text-left">
+            <h2 class="text-3xl md:text-4xl font-semibold tracking-tight text-slate-50">
+              Experience Sturdy in Action
+            </h2>
+            <p class="text-sm md:text-base text-slate-300 leading-relaxed">
+              Sturdy turns what your accounts actually say into ready-to-run
+              <span class="font-medium text-sky-300">account intelligence</span>
+              — delivered in seconds, without chasing the story across ten tools or teammates.
             </p>
-            <div class="hero-cta-row">
-              <a href="https://www.youtube.com/watch?v=lqAx2JcAUGI" target="_blank" rel="noopener noreferrer">
-                <button class="primary-cta-btn">
-                  <span class="icon">▶</span>
-                  <span>Hear Real Feedback</span>
-                </button>
-              </a>
-            </div>
-            <div class="hero-video-wrapper">
-              <iframe
-                src="https://www.youtube.com/embed/lqAx2JcAUGI"
-                title="Hear real feedback from Sturdy customers"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-            </div>
-          </div>
-          <div class="hero-aside">
-            <div class="hero-aside-header">
-              <div class="hero-aside-pill">
-                <span class="hero-aside-pill-dot"></span>
-                <span>Live view</span>
-              </div>
-              <div class="hero-aside-label">Sturdy production prompt</div>
-            </div>
-            <div class="hero-aside-body">
-              <span>“What risks should I watch in Europe SMBs?”</span>
-              <span>— compliant, guardrailed sample response</span>
-            </div>
-            <div class="hero-aside-footer">
-              Routing through: <span>Sturdy EU-West</span>
-            </div>
-            <div class="hero-aside-orbit">
-              <div class="hero-aside-orbit-inner">
-                <div class="hero-aside-orbit-dot"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="main-panel">
-          <div class="prompt-input-row">
-            <div class="prompt-input-wrapper">
-              <input id="customPrompt" class="prompt-input" type="text" placeholder="Or type a custom request" />
-              <div class="prompt-input-hint">Press <span>Return</span></div>
-            </div>
-            <button id="askBtn" class="ask-btn" disabled>
-              <span class="ask-btn-icon">⚡</span>
-              <span>Ask</span>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-[#026eff] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(2,110,255,0.6)] hover:shadow-[0_18px_40px_rgba(2,110,255,0.8)] hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+            >
+              Unlock Your Accounts
+              <span aria-hidden="true" class="text-base">↗</span>
             </button>
           </div>
 
-          <div class="category-row" id="categoryRow"></div>
-          <div class="prompt-list" id="promptList"></div>
-          <div id="thinkingRow" class="thinking-row" aria-live="polite">
-            <div class="thinking-label">Thinking</div>
-            <div class="thinking-dots">
-              <span class="thinking-dot"></span>
-              <span class="thinking-dot"></span>
-              <span class="thinking-dot"></span>
+          <!-- Right: magical "try it" bubble -->
+          <div class="relative md:w-80 flex-shrink-0">
+            <div
+              class="rounded-3xl border border-slate-700/80 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/20 px-5 py-4 text-sm text-slate-100 shadow-[0_18px_50px_rgba(15,23,42,0.9)] backdrop-blur-md"
+            >
+              <p class="text-base font-semibold text-slate-100 mb-2">Try it below</p>
+              <p class="text-sm md:text-base text-slate-50 leading-relaxed">
+                Click a category, pick a prompt, and just ask.
+              </p>
             </div>
-          </div>
-          <div id="resultShell" class="result-shell">
-            <div class="result-bubble">
-              <div class="result-avatar"></div>
-              <div class="result-body">
-                <div class="result-header-line">
-                  <span>Answer</span>
-                  <span class="model">Sturdy Guardrails</span>
-                </div>
-                <div id="resultText" class="result-text"></div>
-              </div>
-            </div>
-            <div class="footer-row">
-              <span>Latency: <span class="em">~5s</span> • Sample response only</span>
-              <span><a href="https://sturdy.ai" target="_blank" rel="noopener noreferrer">Open Sturdy</a></span>
+            <div
+              class="hidden md:flex absolute -left-6 -top-6 h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 shadow-[0_0_25px_rgba(2,110,255,0.7)]"
+            >
+              <span class="text-slate-100 text-lg">✨</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <!-- 🔵 /INTRO HERO CARD -->
+
+      <main class="w-full max-w-5xl space-y-8 mt-4">
+        <!-- Ask bar + app card -->
+        <section class="space-y-6">
+          <section
+            class="bg-white/95 rounded-[28px] border border-slate-200 shadow-[0_18px_60px_rgba(15,23,42,0.16)] p-5 md:p-6 space-y-5 backdrop-blur-sm"
+          >
+            <!-- Ask bar -->
+            <div class="max-w-full mx-auto">
+              <div
+                class="flex items-center gap-4 rounded-full border border-[#026eff]/25 bg-white px-6 py-3 shadow-sm"
+              >
+                <input
+                  id="askInput"
+                  type="text"
+                  class="flex-1 bg-transparent text-sm md:text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  placeholder="Ask anything"
+                />
+                <button
+                  id="askButton"
+                  class="inline-flex items-center justify-center rounded-full bg-[#026eff] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#005ce0] transition"
+                >
+                  Ask
+                </button>
+              </div>
+            </div>
+
+            <!-- Categories row -->
+            <div id="categoryRow" class="flex flex-wrap gap-2 md:gap-3 mt-4"></div>
+
+            <!-- Prompt list -->
+            <div id="promptList" class="mt-2 divide-y divide-slate-200"></div>
+
+            <!-- Result console -->
+            <div id="resultConsole" class="mt-4 space-y-4"></div>
+          </section>
+        </section>
+
+        <!-- Footer -->
+        <footer
+          class="pt-4 border-t border-slate-200 mt-4 text-center space-y-1 text-[11px] text-slate-500"
+        >
+          <p class="font-medium text-slate-600">
+            Powered by <span class="font-semibold">Sturdy</span>
+          </p>
+          <p id="footerLine1"></p>
+        </footer>
+      </main>
     </div>
 
     <script>
-      // Configuration
-      const RESPONSE_DELAY = 5200; // ms
+      // ---------- CONFIG ----------
+      const uiCopy = {
+        askPlaceholder: "Ask anything",
+        footer: {
+          line1: "Sturdy doesn't use your data to train models.",
+        },
+      };
 
-      const categories = [
-        { id: "all", label: "All", count: 4 },
-        { id: "risk", label: "Risk", count: 2 },
-        { id: "racing", label: "Racing", count: 1 },
-        { id: "support", label: "Support", count: 1 }
+      const promptCategories = [
+        { id: "account", label: "Account Management", count: 4 },
+        { id: "growth", label: "Growth Drivers", count: 3 },
+        { id: "product", label: "Product Feedback", count: 4 },
+        { id: "cx", label: "Customer Experience", count: 3 },
+        { id: "support", label: "Customer Service", count: 4 },
       ];
 
       const prompts = [
+        // Account Management
         {
-          id: "europe-risk",
-          category: "risk",
-          title: "Top risks in Europe SMBs",
-          body: "Scan for common risk exposures when underwriting SMBs in Europe",
-          footer: "Guardrails: PII safe • tone: neutral"
+          id: "p1",
+          categories: ["account"],
+          question:
+            "Create a detailed account review for Secbase. Include key goals, current sentiment, recent risks or escalations, engagement patterns, and notable wins. End with a summary of recommended next actions for the Account Owner.",
+          why:
+            "Compiles structured, context-rich insights into an account snapshot that replaces hours of manual gathering.",
         },
         {
-          id: "claims",
-          category: "support",
-          title: "Claims: what to ask",
-          body: "What info should a claims agent collect in the first 3 minutes?",
-          footer: "Guardrails: compliant • tone: concise"
+          id: "p2",
+          categories: ["account"],
+          question:
+            "Build a QBR summary for Secbase. Highlight key metrics (engagement, satisfaction, and renewal signals), summarize customer goals and outcomes achieved, and list open action items or blockers. Include a short narrative describing the customer's sentiment trend over the last quarter.",
+          why: "Provides a ready-to-use framework for customer-facing meetings.",
         },
         {
-          id: "racing",
-          category: "racing",
-          title: "F1 teaser",
-          body: "Compare Red Bull and Ferrari setups for Monza top speed",
-          footer: "Guardrails: light, friendly"
+          id: "p3",
+          categories: ["account"],
+          question:
+            "Generate an Expansion Review for Secbase. Summarize expansion, renewal, or reactivation signals, the “why now,” and the top next moves. Include a few direct conversation excerpts that support each opportunity.",
+          why:
+            "Creates a fast, evidence-backed snapshot of where revenue momentum exists and what to do next.",
         },
         {
-          id: "threats",
-          category: "risk",
-          title: "Cyber threats: SMBs",
-          body: "What top cyber threats should SMBs watch in 2024?",
-          footer: "Guardrails: short list"
-        }
+          id: "p4",
+          categories: ["account"],
+          question:
+            "Build an Action Plan for Secbase. State the current situation, top objectives for the next 30–60 days, key risks, and a step-by-step plan of actions to drive outcomes.",
+          why:
+            "Turns scattered signals into a clear, time-bound plan that’s easy to execute and track.",
+        },
+
+        // Growth Drivers
+        {
+          id: "p5",
+          categories: ["growth"],
+          question:
+            "Show which team members are most frequently praised by customers. Include their names, associated accounts, and short summaries of what customers appreciate—responsiveness, expertise, problem-solving.",
+          why:
+            "Connects praise to specific individuals and behaviors, enabling meaningful recognition.",
+        },
+        {
+          id: "p6",
+          categories: ["growth"],
+          question:
+            "Show customers who have shared specific success stories or measurable results from using our product. Summarize what outcomes they achieved and how they describe the impact on their business.",
+          why:
+            "Pinpoints authentic proof of value for advocacy, renewal, and expansion.",
+        },
+        {
+          id: "p7",
+          categories: ["growth"],
+          question:
+            "Identify customers who are organically promoting our product, referring new users, or expanding usage without direct outreach. Summarize what is driving their advocacy.",
+          why:
+            "Surfaces self-propelled growth signals that are often buried in everyday interactions.",
+        },
+
+        // Product Feedback
+        {
+          id: "p8",
+          categories: ["product"],
+          question:
+            "Summarize the most frequently mentioned bugs in the last 30, 60, and 90 days. Rank them by volume of mentions and customer frustration level. Include brief customer quotes that illustrate confusion or high frustration.",
+          why:
+            "Defines time windows and ranking criteria, helping identify high-impact issues.",
+        },
+        {
+          id: "p9",
+          categories: ["product"],
+          question:
+            "List the most frequently requested features in the last 30, 60, and 90 days. Categorize requests by theme and provide sample customer comments describing the need or desired outcome.",
+          why:
+            "Summarizes at multiple levels: frequency, category, and intent.",
+        },
+        {
+          id: "p10",
+          categories: ["product"],
+          question:
+            "Identify customers describing our product as difficult to use. Summarize usability issues—navigation, setup, unclear workflows, performance—and provide representative excerpts.",
+          why:
+            "Narrows “usability” to actionable examples with supporting evidence.",
+        },
+        {
+          id: "p11",
+          categories: ["product"],
+          question:
+            "List customers expressing confusion or misunderstanding about how our product functions. Summarize what caused confusion (documentation, unexpected behavior, feature overlap) and note which teams or roles raised the concern.",
+          why:
+            "Creates a multi-dimensional structure showing what customers want, why they want it, and how feedback clusters.",
+        },
+
+        // Customer Experience
+        {
+          id: "p12",
+          categories: ["cx"],
+          question:
+            "Summarize customers who have mentioned competitors in the last 30 days. Include which competitors and which features were referenced, along with context from the conversation. Highlight any patterns suggesting competitive gaps.",
+          why:
+            "Adds timeframe, defines desired detail, and requests pattern recognition.",
+        },
+        {
+          id: "p13",
+          categories: ["cx"],
+          question:
+            "List customers who have shared positive feedback or product suggestions in the last 30 days but haven't been contacted since. Summarize what they said and suggest a reason to reach out.",
+          why:
+            "Turns latent engagement signals into targeted follow-up opportunities that strengthen relationships and speed expansion.",
+        },
+        {
+          id: "p14",
+          categories: ["cx"],
+          question:
+            "Show customers who have shared specific success stories or measurable results from using our product. Summarize what outcomes they achieved and how they describe the impact on their business.",
+          why:
+            "Pinpoints authentic proof of value for advocacy, renewal, and expansion.",
+        },
+
+        // Customer Service
+        {
+          id: "p15",
+          categories: ["support"],
+          question:
+            "Which issues or topics are causing the most customer frustration in support conversations? Group them by theme and include examples of the language customers are using.",
+          why:
+            "Isolates emotional signals that indicate experience risk and product friction.",
+        },
+        {
+          id: "p16",
+          categories: ["support"],
+          question:
+            "How well is our support team responding to customers in the last 30 days? Summarize average response and resolution times, identify accounts waiting the longest, and highlight any recurring delays or bottlenecks.",
+          why:
+            "Captures both quantitative (speed) and qualitative (bottlenecks) dimensions of support performance.",
+        },
+        {
+          id: "p17",
+          categories: ["support"],
+          question:
+            "Which support activities are taking the most time but creating the least customer satisfaction? Identify patterns in tickets or cases where effort is high but sentiment stays low.",
+          why:
+            "Connects operational effort to customer impact to pinpoint inefficiencies.",
+        },
+        {
+          id: "p18",
+          categories: ["support"],
+          question:
+            "Identify the top support issues that could have been prevented with better onboarding, documentation, or product design. Summarize how often each issue appears, the teams most affected, and customer language pointing to confusion or unmet expectations.",
+          why:
+            "Diagnoses why tickets exist, revealing upstream causes rather than just symptoms.",
+        },
       ];
 
-      const cannedResponses = {
-        "europe-risk": `Here are the recurring risk themes we see when underwriting EU SMBs:
+      // ---------- DEMO RESULTS (Secbase review + chart) ----------
+      const demoResults = {
+        p1: {
+          title: "Secbase – Detailed Account Review",
+          html: `
+            <div class="space-y-8 text-[13px] text-slate-800 leading-relaxed">
+              <!-- Sturdy header -->
+              <header class="border-b border-slate-200 pb-4">
+                <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                  <div class="h-6 w-6 rounded-xl bg-[#026eff] text-white grid place-items-center text-xs font-bold shadow-sm">
+                    S
+                  </div>
+                  <span>Sturdy</span>
+                </div>
+                <h2 class="mt-4 text-lg font-semibold text-slate-900">
+                  Secbase – Detailed Account Review
+                </h2>
+                <p class="mt-1 text-[11px] text-slate-500">
+                  As of 2025-12-05 · Based on recent customer conversations across email, tickets, and calls.
+                </p>
+              </header>
 
-• Liquidity: thin cash buffers and delayed receivables stretch days-to-cash.
-• Supply chain: single-source vendors, weak alternates, long lead times.
-• Compliance: fragmented VAT rules, worker classification, and data residency.
-• Credit: concentrated customer base, limited collateral, reliance on short-term credit lines.
-• Operational: manual invoicing, weak access controls, infrequent backups.
+              <!-- Account snapshot -->
+              <section class="space-y-3">
+                <h3 class="text-[13px] font-semibold tracking-tight text-slate-900">Account Snapshot</h3>
+                <div class="grid gap-x-8 gap-y-1 md:grid-cols-2 text-[12px] text-slate-700 max-w-xl">
+                  <p><span class="font-semibold">Account:</span> Secbase</p>
+                  <p><span class="font-semibold">Account Owner:</span> Mark Ford</p>
+                  <p><span class="font-semibold">Last inbound:</span> 2025-12-05</p>
+                  <p><span class="font-semibold">Last outbound:</span> 2025-12-05</p>
+                </div>
+              </section>
 
-Mitigations: diversify vendors, enforce least privilege, add cash reserves, and monitor receivables weekly.`,
-        claims: `A claims agent should gather these within the first 3 minutes:
+              <!-- 1. Key customer goals -->
+              <section class="space-y-3">
+                <h3 class="text-[15px] font-semibold text-slate-900">1. Key Customer Goals</h3>
+                <p>
+                  Based on recent communications, Secbase’s current goals appear centered around:
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>Maintaining platform continuity while managing tight budget constraints.</li>
+                  <li>Validating whether your product can meet reporting and roadmap expectations before renewing.</li>
+                  <li>Ensuring the platform continues to support the business unit owned by Sarah Newberg as they assess annual commitment options.</li>
+                </ul>
+                <p class="text-[12px] text-slate-600 mt-2 font-medium">Source examples:</p>
+                <ul class="list-disc list-inside space-y-1 text-[12px]">
+                  <li>
+                    <a href="#" class="text-[#026eff] hover:underline">
+                      “After connecting with Sarah Newberg... it’s clear we need to explore all available options before moving forward with another annual commitment.”
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-[#026eff] hover:underline">
+                      “We need to understand whether your roadmap will actually cover the reporting we’ve been planning around before we lock in another multi-year term.”
+                    </a>
+                  </li>
+                </ul>
+              </section>
 
-• Who/what/when/where: parties involved, date/time, exact location.
-• Policy: policy number, coverage type, limits, exclusions flagged.
-• Incident: short narrative, photos/videos available, police/incident reports filed.
-• Damages/injuries: immediate injuries, property damage scope, third parties affected.
-• Dependencies: any emergency services contacted; remediation already started?
+              <!-- 2. Current customer sentiment -->
+              <section class="space-y-3">
+                <h3 class="text-[15px] font-semibold text-slate-900">2. Current Customer Sentiment</h3>
+                <p>
+                  Current sentiment is <span class="font-semibold">highly negative</span>, driven almost entirely by
+                  pricing-related frustration and perceived gaps in value delivery.
+                </p>
+                <p class="text-[12px] text-slate-700 font-medium">Key indicators:</p>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>Deep frustration and disappointment around the recent price increase.</li>
+                  <li>Language describing the uplift as abrupt, substantial, and unacceptable.</li>
+                  <li>Explicit budget misalignment and repeated references to needing to explore alternatives.</li>
+                </ul>
+                <p class="text-[12px] text-slate-600 mt-2 font-medium">Source examples:</p>
+                <ul class="list-disc list-inside space-y-1 text-[12px]">
+                  <li>
+                    <a href="#" class="text-[#026eff] hover:underline">
+                      “Mark I am writing to express my deep frustration and disappointment regarding the recent announcement of a pricing increase.”
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-[#026eff] hover:underline">
+                      “This abrupt and substantial price hike is unacceptable and has left us feeling undervalued and blindsided.”
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-[#026eff] hover:underline">
+                      “The price increase you previously shared isn’t aligned with what we’ve budgeted.”
+                    </a>
+                  </li>
+                </ul>
+                <p class="mt-1 text-[12px]">
+                  <span class="font-semibold">Summary:</span> this is a renewal-risk account with declining confidence and active exploration of alternatives.
+                </p>
+              </section>
 
-Close by confirming next steps, documentation needs, and preferred contact channel.`,
-        racing: `For Monza top speed, teams tend to:
+              <!-- 3. Recent risks & escalations -->
+              <section class="space-y-4">
+                <h3 class="text-[15px] font-semibold text-slate-900">3. Recent Risks & Escalations</h3>
 
-• Aero: ultra-low downforce rear wing, trimmed beam wing, minimal gurney.
-• Power unit: aggressive engine modes in quali; cooling exits tightened (watch temps).
-• Suspension: lower rake, stiffer rear to keep stability through Variante Ascari exit.
-• Gearing: longer 7th/8th to optimize main straight Vmax.
-• Tyres: manage rear slip in Variante della Roggia to protect traction.
+                <div class="space-y-2">
+                  <h4 class="text-[13px] font-semibold text-slate-900">Pricing & Budget Risk</h4>
+                  <p>The strongest and clearest risk comes from the price increase announcement:</p>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Perception that the uplift is misaligned with value and current usage.</li>
+                    <li>Requests for reconsideration or phased implementation to reduce impact.</li>
+                    <li>Statements that, without adjustment, Secbase will be forced to evaluate alternatives.</li>
+                  </ul>
+                  <p class="text-[12px] text-slate-600 mt-2 font-medium">Source example:</p>
+                  <ul class="list-disc list-inside space-y-1 text-[12px]">
+                    <li>
+                      <a href="#" class="text-[#026eff] hover:underline">
+                        “Unless there is a reconsideration of this price increase or at least a phased implementation plan to mitigate its impact, we will be forced to evaluate alternative solutions.”
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
-Result: top speed gains but reduced grip through Lesmos—drivers manage lift-and-coast to keep rear temps in check.`,
-        threats: `Top 2024 SMB cyber threats (EU+US):
+                <div class="space-y-2">
+                  <h4 class="text-[13px] font-semibold text-slate-900">Perceived Overpromising</h4>
+                  <p>
+                    Stakeholders reference reporting capabilities they expected to have in place by now. Delays in roadmap delivery are
+                    increasingly framed as broken promises.
+                  </p>
+                  <p class="text-[12px] text-slate-600 mt-2 font-medium">Source example:</p>
+                  <ul class="list-disc list-inside space-y-1 text-[12px]">
+                    <li>
+                      <a href="#" class="text-[#026eff] hover:underline">
+                        “Your team is still talking about this functionality being on the roadmap while we are being asked to consider our renewal.”
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
-• Phishing → business email compromise; deepfake-enabled invoice fraud.
-• Ransomware → lateral movement via unmanaged endpoints and weak MFA.
-• SaaS sprawl → ungoverned apps with excessive permissions; shadow data syncs.
-• Supply chain → compromised libraries, plugins, and third-party agents.
-• AI misuse → leaked prompts, model poisoning, exfil of embeddings.
+                <div class="space-y-2">
+                  <h4 class="text-[13px] font-semibold text-slate-900">Value Concern</h4>
+                  <p>
+                    Repeated questions about ROI and whether the platform still justifies the cost reinforce a broader value-perception issue.
+                  </p>
+                </div>
+              </section>
 
-Mitigations: enforce MFA, restrict tokens, least privilege, dependency scanning, EDR on all endpoints, and verified backups.`
+              <!-- 4. Engagement patterns -->
+              <section class="space-y-3">
+                <h3 class="text-[15px] font-semibold text-slate-900">4. Engagement Patterns</h3>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>Engagement is active and frequent, with multiple stakeholders involved (Sarah Newberg, Holly Langerfield, Brittany Witherspoon, finance).</li>
+                  <li>Most recent activity is reactive to pricing announcements and related follow-ups.</li>
+                  <li>Tone is increasingly tense, often requiring escalation or detailed explanation.</li>
+                  <li>Internal involvement from multiple teammates signals cross-functional pressure to resolve the situation.</li>
+                </ul>
+              </section>
+
+              <!-- 5. Notable wins -->
+              <section class="space-y-3">
+                <h3 class="text-[15px] font-semibold text-slate-900">5. Notable Wins</h3>
+                <p>
+                  No new explicit wins appear in the latest communications, but Secbase does acknowledge historical value:
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>Long-standing loyalty as an enterprise customer.</li>
+                  <li>Previous recognition of service quality and collaboration from the account team.</li>
+                </ul>
+                <p class="text-[12px]">
+                  This creates latent goodwill that can be used in renewal conversations if pricing and roadmap concerns are addressed directly.
+                </p>
+              </section>
+
+              <!-- 6. Recommended next actions -->
+              <section class="space-y-4">
+                <h3 class="text-[15px] font-semibold text-slate-900">6. Recommended Next Actions for the Account Owner</h3>
+
+                <div class="space-y-1">
+                  <h4 class="text-[13px] font-semibold text-slate-900">1. Address Pricing Objections Immediately</h4>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Offer a small set of options (phased rollout, multi-year term, or scoped package) that reduce the impact of the uplift.</li>
+                    <li>Connect each option to concrete value and expected outcomes for Secbase.</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-[13px] font-semibold text-slate-900">2. Rebuild the Value Narrative</h4>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Deliver a tailored ROI review for Sarah Newberg’s business unit.</li>
+                    <li>Highlight usage, metrics, and roadmap items directly tied to their stated goals.</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-[13px] font-semibold text-slate-900">3. Resolve the Reporting Feature Gap</h4>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Provide clear written timelines, interim workarounds, or alternative approaches.</li>
+                    <li>Acknowledge that expectations were set and clarify how they will now be met.</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-[13px] font-semibold text-slate-900">4. Hold a Multi-Stakeholder Renewal Strategy Call</h4>
+                  <p>
+                    Bring together Sarah, Holly, and Brittany to reset expectations, clarify pricing options, and agree on the next 60–90 days of activity.
+                  </p>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-[13px] font-semibold text-slate-900">5. Increase Responsiveness</h4>
+                  <p>
+                    Tighten turnaround time on renewal-related questions to reduce response-lag frustration and demonstrate renewed focus on the account.
+                  </p>
+                </div>
+              </section>
+
+              <!-- 📊 Signal Chart (static, uneven distribution) -->
+              <section class="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 md:p-5 space-y-4">
+                <p class="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                  Secbase — Signal Distribution
+                </p>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                  <!-- Donut chart using CSS conic-gradient -->
+                  <div class="relative w-56 h-56">
+                    <div
+                      class="absolute inset-0 rounded-full bg-[conic-gradient(#3b82f6_0deg,#3b82f6_150deg,#22c55e_150deg,#22c55e_230deg,#f97316_230deg,#f97316_270deg,#ef4444_270deg,#ef4444_330deg,#9ca3af_330deg,#9ca3af_360deg)] shadow-inner"
+                    ></div>
+                    <div
+                      class="absolute inset-10 rounded-full bg-slate-50 flex items-center justify-center shadow-[0_0_0_1px_rgba(148,163,184,0.5)]"
+                    >
+                      <span class="text-sm font-medium text-slate-600">Signals</span>
+                    </div>
+                  </div>
+
+                  <!-- Legend -->
+                  <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-[12px] text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-[#3b82f6]"></span>
+                      <span>Pricing issues (largest cluster)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-[#22c55e]"></span>
+                      <span>Renewal risk</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-[#f97316]"></span>
+                      <span>Response lag</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-[#ef4444]"></span>
+                      <span>Value / ROI concern</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-[#9ca3af]"></span>
+                      <span>Other risk signals</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Signal summary footer -->
+              <section class="mt-4">
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  <strong>Signal summary</strong><br />
+                  Secbase shows clustered risk signals around pricing, perceived overpromising, and value perception. In Sturdy,
+                  each section above is clickable back to the exact emails, tickets, and call notes that triggered it — the blue
+                  links here represent those underlying conversations.
+                </p>
+              </section>
+            </div>
+          `,
+        },
       };
 
-      const promptListEl = document.getElementById("promptList");
-      const categoryRowEl = document.getElementById("categoryRow");
-      const customPromptEl = document.getElementById("customPrompt");
-      const askBtn = document.getElementById("askBtn");
-      const thinkingRow = document.getElementById("thinkingRow");
-      const resultShell = document.getElementById("resultShell");
-      const resultText = document.getElementById("resultText");
+      // ---------- APP LOGIC ----------
+      const els = {
+        askInput: document.getElementById("askInput"),
+        askButton: document.getElementById("askButton"),
+        categoryRow: document.getElementById("categoryRow"),
+        promptList: document.getElementById("promptList"),
+        footerLine1: document.getElementById("footerLine1"),
+        resultConsole: document.getElementById("resultConsole"),
+      };
 
+      let activeCategoryId = "account";
       let selectedPromptId = null;
-      let typewriterTimeout = null;
+
+      function initStaticCopy() {
+        if (els.askInput) els.askInput.placeholder = uiCopy.askPlaceholder;
+        if (els.footerLine1) els.footerLine1.textContent = uiCopy.footer.line1;
+      }
 
       function renderCategories() {
-        categoryRowEl.innerHTML = "";
-        categories.forEach((cat, idx) => {
-          const pill = document.createElement("button");
-          pill.className = `tab-pill ${idx === 0 ? "active" : ""}`;
-          pill.dataset.id = cat.id;
-          pill.innerHTML = `${cat.label} <span class="count">${cat.count}</span>`;
-          pill.addEventListener("click", () => {
-            document.querySelectorAll(".tab-pill").forEach((el) => el.classList.remove("active"));
-            pill.classList.add("active");
-            renderPrompts(cat.id === "all" ? null : cat.id);
+        els.categoryRow.innerHTML = "";
+        promptCategories.forEach((cat, index) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.dataset.id = cat.id;
+          btn.className =
+            "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium bg-slate-50 text-slate-800 border border-slate-200 hover:bg-slate-100 hover:border-slate-300 transition-colors";
+          btn.innerHTML = `
+            <span class="label">${cat.label}</span>
+            <span class="count-pill text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200/80">${cat.count}</span>
+          `;
+          btn.addEventListener("click", () => {
+            activeCategoryId = cat.id;
+            selectedPromptId = null;
+            renderPrompts();
+            updateActiveCategoryStyles();
           });
-          categoryRowEl.appendChild(pill);
+          els.categoryRow.appendChild(btn);
+
+          if (index === 0) activeCategoryId = cat.id;
+        });
+        updateActiveCategoryStyles();
+      }
+
+      function updateActiveCategoryStyles() {
+        els.categoryRow.querySelectorAll("button").forEach((btn) => {
+          const isActive = btn.dataset.id === activeCategoryId;
+          const countSpan = btn.querySelector(".count-pill");
+
+          if (isActive) {
+            btn.className =
+              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium bg-[#026eff] text-white border border-[#026eff] shadow-sm";
+            if (countSpan) {
+              countSpan.className =
+                "count-pill text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-900/90 text-white";
+            }
+          } else {
+            btn.className =
+              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium bg-slate-50 text-slate-800 border border-slate-200 hover:bg-slate-100 hover:border-slate-300 transition-colors";
+            if (countSpan) {
+              countSpan.className =
+                "count-pill text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200/80";
+            }
+          }
         });
       }
 
-      function renderPrompts(filterCategory = null) {
-        promptListEl.innerHTML = "";
-        const filtered = filterCategory
-          ? prompts.filter((p) => p.category === filterCategory)
-          : prompts;
+      function getVisiblePrompts() {
+        return prompts.filter((p) => p.categories.includes(activeCategoryId));
+      }
 
-        filtered.forEach((prompt) => {
-          const card = document.createElement("div");
-          card.className = `prompt-card ${selectedPromptId === prompt.id ? "selected" : ""}`;
-          card.dataset.id = prompt.id;
-          card.innerHTML = `
-            <div class="prompt-card-title">${prompt.title}</div>
-            <div class="prompt-card-body">${prompt.body}</div>
-            <div class="prompt-card-footer">${prompt.footer}</div>
-            <div class="prompt-meta-row">
-              <span class="em">${prompt.category}</span>
-              <span class="example">Example prompt</span>
-            </div>
+      function renderPrompts() {
+        const visible = getVisiblePrompts();
+        els.promptList.innerHTML = "";
+
+        visible.forEach((p) => {
+          const wrapper = document.createElement("button");
+          wrapper.type = "button";
+          wrapper.dataset.id = p.id;
+          wrapper.className =
+            "w-full text-left py-4 first:pt-0 last:pb-0 focus:outline-none";
+
+          const inner = document.createElement("div");
+          inner.className =
+            "rounded-2xl px-4 py-3 -mx-1 hover:bg-slate-50 transition";
+          inner.innerHTML = `
+            <p class="text-sm md:text-[15px] font-medium text-slate-900 leading-snug">
+              ${p.question}
+            </p>
+            <p class="mt-1 text-xs text-slate-500">
+              <span class="font-medium">Why it works:</span> ${p.why}
+            </p>
           `;
 
-          card.addEventListener("click", () => {
-            selectedPromptId = prompt.id;
-            document.querySelectorAll(".prompt-card").forEach((el) => el.classList.remove("selected"));
-            card.classList.add("selected");
-            askBtn.disabled = false;
-            customPromptEl.value = "";
+          wrapper.appendChild(inner);
+
+          wrapper.addEventListener("click", () => {
+            selectedPromptId = p.id;
+            if (els.askInput) els.askInput.value = p.question;
+            updateSelectedPromptStyles();
           });
 
-          promptListEl.appendChild(card);
+          els.promptList.appendChild(wrapper);
+        });
+
+        updateSelectedPromptStyles();
+      }
+
+      function updateSelectedPromptStyles() {
+        els.promptList.querySelectorAll("button").forEach((btn) => {
+          const inner = btn.firstElementChild;
+          if (!inner) return;
+          const isSelected = btn.dataset.id === selectedPromptId;
+          inner.classList.toggle("bg-slate-900/5", isSelected);
+          inner.classList.toggle("ring-1", isSelected);
+          inner.classList.toggle("ring-slate-200", isSelected);
         });
       }
 
-      function setThinkingState(isThinking) {
-        thinkingRow.style.display = isThinking ? "flex" : "none";
-      }
-
-      function resetResult() {
-        resultShell.style.display = "none";
-        resultText.textContent = "";
-        if (typewriterTimeout) {
-          clearTimeout(typewriterTimeout);
-          typewriterTimeout = null;
+      function buildFallbackAnswer() {
+        switch (activeCategoryId) {
+          case "growth":
+            return "Sturdy looks across customer conversations for expansion, advocacy, and referral signals, then highlights the people, accounts, and quotes that show real growth momentum.";
+          case "product":
+            return "Sturdy clusters feedback into themes so product and CS can see the bugs, feature requests, and usability issues that matter most, with example quotes attached.";
+          case "cx":
+            return "Sturdy surfaces conversations that mention competitors, delight, and frustration so you can see where the experience is winning and where it’s at risk.";
+          case "support":
+            return "Sturdy analyzes tickets and transcripts to show which issues drive the most effort and frustration, and where better onboarding or design could prevent them.";
+          case "account":
+          default:
+            return "Sturdy pulls together goals, risks, sentiment, and engagement from every channel into a single view so account teams can act quickly and confidently.";
         }
       }
 
-      function typewriterEffect(text, index = 0) {
-        if (index <= text.length) {
-          resultText.textContent = text.slice(0, index);
-          resultText.parentElement.scrollTop = resultText.parentElement.scrollHeight;
-          typewriterTimeout = setTimeout(() => typewriterEffect(text, index + 1), 12);
+      function renderResult(question, promptId) {
+        if (!els.resultConsole) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className =
+          "rounded-3xl border border-slate-200 bg-white px-5 py-5 md:px-6 md:py-6 shadow-sm text-sm text-slate-900 space-y-4";
+
+        const meta = document.createElement("div");
+        meta.className =
+          "flex items-center justify-between gap-3 text-[11px] text-slate-500";
+        const time = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        meta.innerHTML = `
+          <span class="font-semibold uppercase tracking-[0.16em]">Demo response</span>
+          <span>${time}</span>
+        `;
+
+        const questionBlock = document.createElement("div");
+        questionBlock.className = "space-y-1";
+        questionBlock.innerHTML = `
+          <p class="text-[11px] font-medium text-slate-600 uppercase tracking-[0.12em]">You asked</p>
+          <p class="text-sm md:text-[15px] leading-snug">${question}</p>
+        `;
+
+        const answerBlock = document.createElement("div");
+        answerBlock.className =
+          "pt-3 mt-1 border-t border-slate-200 space-y-2";
+        const answerLabel = document.createElement("p");
+        answerLabel.className =
+          "text-[11px] font-medium text-slate-600 uppercase tracking-[0.12em]";
+        answerLabel.textContent = "How Sturdy would answer";
+        const answerBody = document.createElement("div");
+        answerBody.className =
+          "text-xs md:text-sm text-slate-800 leading-relaxed space-y-2";
+
+        const demo = promptId ? demoResults[promptId] : null;
+        if (demo && demo.html) {
+          const htmlWrapper = document.createElement("div");
+          htmlWrapper.innerHTML = demo.html;
+          answerBody.appendChild(htmlWrapper);
+        } else {
+          const p = document.createElement("p");
+          p.textContent = buildFallbackAnswer();
+          answerBody.appendChild(p);
         }
+
+        answerBlock.appendChild(answerLabel);
+        answerBlock.appendChild(answerBody);
+
+        wrapper.appendChild(meta);
+        wrapper.appendChild(questionBlock);
+        wrapper.appendChild(answerBlock);
+
+        // Append (chat-style history). If you want only one at a time, use = instead of +=.
+        els.resultConsole.appendChild(wrapper);
       }
 
-      function showResult(answer) {
-        resultShell.style.display = "block";
-        resultText.textContent = "";
-        typewriterEffect(answer, 0);
+      function resolvePromptIdFromQuestion(question) {
+        if (selectedPromptId) return selectedPromptId;
+        const trimmed = question.trim();
+        if (!trimmed) return null;
+
+        const exact = prompts.find((p) => p.question === trimmed);
+        if (exact) return exact.id;
+
+        const lowerQ = trimmed.toLowerCase();
+        const fuzzy = prompts.find((p) =>
+          lowerQ.startsWith(p.question.slice(0, 80).toLowerCase())
+        );
+        return fuzzy ? fuzzy.id : null;
       }
 
-      function getAnswer() {
-        if (selectedPromptId) {
-          return cannedResponses[selectedPromptId] || "No response configured.";
+      function wireInteractions() {
+        if (els.askButton) {
+          els.askButton.addEventListener("click", () => {
+            if (!els.askInput) return;
+            const question = els.askInput.value.trim();
+            if (!question) return;
+
+            const promptId = resolvePromptIdFromQuestion(question);
+
+            els.askButton.disabled = true;
+            const original = els.askButton.textContent;
+            els.askButton.textContent = "Thinking…";
+
+            setTimeout(() => {
+              els.askButton.disabled = false;
+              els.askButton.textContent = original;
+              renderResult(question, promptId);
+            }, 700);
+          });
         }
 
-        const custom = customPromptEl.value.trim();
-        if (custom) {
-          return `Sample: ${custom}\n\nThis is a placeholder Sturdy answer. Replace cannedResponses or call your API.`;
+        if (els.askInput && els.askButton) {
+          els.askInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              els.askButton.click();
+            }
+          });
         }
-
-        return "No prompt selected.";
-      }
-
-      function handleAsk() {
-        promptListEl.style.display = "none";
-        document.getElementById("categoryRow").style.display = "none";
-        document.querySelector(".prompt-input-row").style.display = "none";
-        resetResult();
-        setThinkingState(true);
-        askBtn.disabled = true;
-
-        setTimeout(() => {
-          const answer = getAnswer();
-          setThinkingState(false);
-          showResult(answer);
-        }, RESPONSE_DELAY);
       }
 
       function init() {
+        initStaticCopy();
         renderCategories();
         renderPrompts();
-
-        askBtn.addEventListener("click", handleAsk);
-
-        customPromptEl.addEventListener("input", () => {
-          const hasValue = customPromptEl.value.trim().length > 0;
-          selectedPromptId = null;
-          document.querySelectorAll(".prompt-card").forEach((el) => el.classList.remove("selected"));
-          askBtn.disabled = !hasValue;
-        });
-
-        customPromptEl.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && !askBtn.disabled) {
-            handleAsk();
-          }
-        });
+        wireInteractions();
       }
 
       init();
