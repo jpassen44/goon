@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sturdy Intro App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #f4f5fb;
+        --panel: #0b1021;
+        --border: rgba(15, 23, 42, 0.25);
+        --border-subtle: rgba(148, 163, 184, 0.4);
+        --pill: rgba(148, 163, 184, 0.16);
+        --text-main: #f9fafb;
+        --text-muted: #9ca3af;
+        --accent: #38bdf8;
+        --accent-soft: rgba(56, 189, 248, 0.1);
+        --accent-strong: #0ea5e9;
+        --accent-green: #22c55e;
+        --shadow-soft: 0 26px 80px rgba(15, 23, 42, 0.54);
+        --shadow-pill: 0 14px 40px rgba(56, 189, 248, 0.6);
+        --chip-bg: rgba(15, 23, 42, 0.85);
+        --chip-border: rgba(148, 163, 184, 0.6);
+        --bubble-bg: #f9fafb;
+        --bubble-border: rgba(148, 163, 184, 0.5);
+        --prompt-bg: rgba(15, 23, 42, 0.92);
+        --prompt-border: rgba(148, 163, 184, 0.5);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 32px 16px 40px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+          sans-serif;
+        background:
+          radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
+          radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.12), transparent 50%),
+          #020617;
+        color: var(--text-main);
+      }
+
+      .shell {
+        width: 100%;
+        max-width: 1120px;
+        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 60%),
+          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.06), transparent 55%), var(--bg);
+        border-radius: 32px;
+        border: 1px solid rgba(15, 23, 42, 0.16);
+        box-shadow:
+          0 30px 80px rgba(15, 23, 42, 0.35),
+          0 0 0 1px rgba(15, 23, 42, 0.06);
+        padding: 28px 28px 24px;
+      }
+
+      .shell-inner {
+        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 70%),
+          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.18), transparent 60%),
+          linear-gradient(135deg, #020617 0%, #020617 34%, #020617 100%);
+        border-radius: 24px;
+        padding: 24px;
+        border: 1px solid rgba(15, 23, 42, 0.7);
+      }
+
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 16px;
+      }
+
+      .app-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.65);
+        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.6);
+      }
+
+      .app-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
+      }
+
+      .app-badge span {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .header-pill {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .header-pill span {
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+        gap: 24px;
+        background:
+          radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.3), transparent 55%),
+          radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.25), transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.9), transparent 60%),
+          #020617;
+        border-radius: 24px;
+        border: 1px solid rgba(15, 23, 42, 0.9);
+        box-shadow:
+          0 24px 60px rgba(15, 23, 42, 0.85),
+          0 0 0 1px rgba(15, 23, 42, 0.9);
+        padding: 22px 22px 18px;
+      }
+
+      .hero-main {
+        padding: 4px 8px 4px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        margin: 0;
+      }
+
+      .hero-body {
+        font-size: 14px;
+        color: var(--text-muted);
+        max-width: 480px;
+      }
+
+      .hero-body a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .hero-body a:hover {
+        text-decoration: underline;
+      }
+
+      .hero-cta-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 8px;
+      }
+
+      .hero-video-wrapper {
+        position: relative;
+        margin-top: 12px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
+      }
+
+      .hero-video-wrapper iframe {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+
+      .primary-cta-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 20px 9px 18px;
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        color: #0b1120;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        box-shadow:
+          0 18px 40px rgba(56, 189, 248, 0.55),
+          0 0 0 1px rgba(8, 47, 73, 0.8);
+        transform-origin: center;
+        transition:
+          background 0.18s ease,
+          box-shadow 0.18s ease,
+          transform 0.12s ease;
+      }
+
+      .primary-cta-btn span.icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 17px;
+        height: 17px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.95);
+        color: var(--accent);
+        font-size: 12px;
+      }
+
+      .primary-cta-btn:hover {
+        background: linear-gradient(135deg, #38bdf8, #22c55e);
+        box-shadow:
+          0 24px 50px rgba(56, 189, 248, 0.65),
+          0 0 0 1px rgba(8, 47, 73, 0.9);
+        transform: translateY(-1px);
+      }
+
+      .primary-cta-btn:active {
+        transform: translateY(0) scale(0.985);
+        box-shadow:
+          0 18px 40px rgba(56, 189, 248, 0.55),
+          0 0 0 1px rgba(8, 47, 73, 0.9);
+      }
+
+      .hero-inline-hint {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .hero-inline-hint strong {
+        color: rgba(248, 250, 252, 0.9);
+      }
+
+      .hero-aside {
+        position: relative;
+        border-radius: 18px;
+        background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.28), transparent 50%),
+          radial-gradient(circle at 120% -20%, rgba(34, 197, 94, 0.4), transparent 45%),
+          rgba(15, 23, 42, 0.98);
+        border: 1px solid rgba(15, 23, 42, 0.9);
+        box-shadow:
+          0 20px 60px rgba(15, 23, 42, 0.9),
+          0 0 0 1px rgba(15, 23, 42, 0.9);
+        padding: 14px 14px 13px;
+        overflow: hidden;
+      }
+
+      .hero-aside-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .hero-aside-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(209, 213, 219, 0.9);
+      }
+
+      .hero-aside-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #facc15, #f97316);
+        box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35);
+      }
+
+      .hero-aside-label {
+        font-size: 11px;
+        color: rgba(148, 163, 184, 0.9);
+      }
+
+      .hero-aside-body {
+        font-size: 13px;
+        color: rgba(209, 213, 219, 0.95);
+        margin-bottom: 8px;
+      }
+
+      .hero-aside-body span {
+        display: block;
+      }
+
+      .hero-aside-footer {
+        font-size: 11px;
+        color: rgba(148, 163, 184, 0.9);
+      }
+
+      .hero-aside-footer span {
+        color: rgba(248, 250, 252, 0.85);
+      }
+
+      .hero-aside-orbit {
+        position: absolute;
+        inset: 8px 8px auto auto;
+        pointer-events: none;
+        opacity: 0.2;
+      }
+
+      .hero-aside-orbit-inner {
+        width: 68px;
+        height: 68px;
+        border-radius: 999px;
+        border: 1px dashed rgba(148, 163, 184, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-aside-orbit-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+      }
+
+      .hero-aside-orbit-inner::before,
+      .hero-aside-orbit-inner::after {
+        content: "";
+        position: absolute;
+        inset: -16px;
+        border-radius: inherit;
+        border: 1px dashed rgba(148, 163, 184, 0.35);
+      }
+
+      .hero-aside-orbit-inner::after {
+        inset: -30px;
+        border-style: solid;
+        border-color: rgba(56, 189, 248, 0.35);
+      }
+
+      .hero-aside::after {
+        content: "";
+        position: absolute;
+        inset: 22px;
+        border-radius: 18px;
+        border: 1px solid rgba(15, 23, 42, 0.85);
+        pointer-events: none;
+      }
+
+      .main-panel {
+        margin-top: 18px;
+        background: #f9fafb;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow:
+          0 18px 60px rgba(15, 23, 42, 0.18),
+          0 0 0 1px rgba(15, 23, 42, 0.04);
+        padding: 18px 18px 14px;
+        color: #0f172a;
+      }
+
+      .prompt-input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .prompt-input-wrapper {
+        flex: 1 1 auto;
+        position: relative;
+      }
+
+      .prompt-input {
+        width: 100%;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.65);
+        padding: 10px 17px 10px 15px;
+        font-size: 13px;
+        color: #0f172a;
+        outline: none;
+        background:
+          radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.06), transparent 60%),
+          #f9fafb;
+      }
+
+      .prompt-input:focus {
+        border-color: var(--accent-strong);
+        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+      }
+
+      .prompt-input-hint {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 11px;
+        color: #9ca3af;
+      }
+
+      .prompt-input-hint span {
+        padding: 3px 6px;
+        border-radius: 999px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        margin-left: 4px;
+      }
+
+      .ask-btn {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        border: none;
+        padding: 9px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        color: #0b1120;
+        box-shadow:
+          0 18px 44px rgba(56, 189, 248, 0.6),
+          0 0 0 1px rgba(8, 47, 73, 0.9);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transform-origin: center;
+        transition:
+          transform 0.1s ease,
+          box-shadow 0.1s ease,
+          opacity 0.15s ease;
+      }
+
+      .ask-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow:
+          0 20px 54px rgba(56, 189, 248, 0.7),
+          0 0 0 1px rgba(8, 47, 73, 0.95);
+      }
+
+      .ask-btn:active:not(:disabled) {
+        transform: translateY(0) scale(0.985);
+        box-shadow:
+          0 18px 44px rgba(56, 189, 248, 0.62),
+          0 0 0 1px rgba(8, 47, 73, 0.95);
+      }
+
+      .ask-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        box-shadow: none;
+        background: linear-gradient(135deg, #0f172a, #020617);
+        color: #9ca3af;
+      }
+
+      .ask-btn-icon {
+        font-size: 12px;
+      }
+
+      .category-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .tab-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        border: 1px solid #cbd5f5;
+        font-size: 12px;
+        color: #0f172a;
+        background: #f9fafb;
+        cursor: pointer;
+        transition:
+          background 0.12s ease,
+          box-shadow 0.12s ease,
+          transform 0.08s ease,
+          border-color 0.12s ease;
+      }
+
+      .tab-pill span.count {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 999px;
+        background: #e5edff;
+        color: #1d4ed8;
+      }
+
+      .tab-pill:hover {
+        background: #e5edff;
+        border-color: #a5b4fc;
+        transform: translateY(-0.5px);
+      }
+
+      .tab-pill.active {
+        background: #0f172a;
+        color: #e5edff;
+        border-color: #1d4ed8;
+        box-shadow:
+          0 12px 28px rgba(15, 23, 42, 0.35),
+          0 0 0 1px rgba(30, 64, 175, 0.85);
+      }
+
+      .tab-pill.active span.count {
+        background: rgba(59, 130, 246, 0.2);
+        color: #bfdbfe;
+      }
+
+      .prompt-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+
+      .prompt-card {
+        border-radius: 16px;
+        padding: 10px 13px 9px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(249, 250, 251, 0.96);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        transition:
+          background 0.12s ease,
+          box-shadow 0.12s ease,
+          transform 0.08s ease,
+          border-color 0.12s ease;
+      }
+
+      .prompt-card:hover {
+        background: #f3f4ff;
+        border-color: #a5b4fc;
+        transform: translateY(-0.5px);
+        box-shadow: 0 14px 30px rgba(148, 163, 184, 0.4);
+      }
+
+      .prompt-card.selected {
+        background: #0f172a;
+        border-color: #1d4ed8;
+        box-shadow:
+          0 20px 36px rgba(15, 23, 42, 0.7),
+          0 0 0 1px rgba(30, 64, 175, 0.85);
+      }
+
+      .prompt-card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .prompt-card.selected .prompt-card-title {
+        color: #e5edff;
+      }
+
+      .prompt-card-body {
+        font-size: 12px;
+        color: #4b5563;
+      }
+
+      .prompt-card.selected .prompt-card-body {
+        color: #e5e7eb;
+      }
+
+      .prompt-card-footer {
+        font-size: 11px;
+        color: #6b7280;
+      }
+
+      .prompt-card.selected .prompt-card-footer {
+        color: #9ca3af;
+      }
+
+      .prompt-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: #6b7280;
+        margin-top: 7px;
+      }
+
+      .prompt-meta-row span.em {
+        color: #1d4ed8;
+      }
+
+      .prompt-meta-row span.example {
+        color: #6b7280;
+      }
+
+      .thinking-row {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        margin-bottom: 10px;
+      }
+
+      .thinking-label {
+        font-size: 12px;
+        color: rgba(226, 232, 240, 0.98);
+      }
+
+      .thinking-dots {
+        display: inline-flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .thinking-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent-strong), var(--accent-green));
+        opacity: 0.2;
+        animation: thinking 1s infinite ease-in-out;
+      }
+
+      .thinking-dot:nth-child(2) {
+        animation-delay: 0.18s;
+      }
+
+      .thinking-dot:nth-child(3) {
+        animation-delay: 0.36s;
+      }
+
+      @keyframes thinking {
+        0%,
+        80%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.15;
+        }
+        40% {
+          transform: translateY(-5px);
+          opacity: 1;
+        }
+      }
+
+      .result-shell {
+        display: none;
+        margin-top: 4px;
+      }
+
+      .result-bubble {
+        background: var(--bubble-bg);
+        border-radius: 18px;
+        border: 1px solid var(--bubble-border);
+        padding: 10px 12px;
+        display: flex;
+        gap: 10px;
+        font-size: 13px;
+        color: #0f172a;
+        box-shadow:
+          0 16px 30px rgba(148, 163, 184, 0.45),
+          0 0 0 1px rgba(148, 163, 184, 0.4);
+        max-height: 280px;
+        overflow-y: auto;
+      }
+
+      .result-avatar {
+        flex: 0 0 auto;
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0%, #22c55e, transparent 60%),
+          radial-gradient(circle at 80% 80%, #0ea5e9, transparent 60%),
+          #020617;
+        position: relative;
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 0 4px rgba(148, 163, 184, 0.5);
+      }
+
+      .result-avatar::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: inherit;
+        border: 1px solid rgba(148, 163, 184, 0.9);
+        opacity: 0.8;
+      }
+
+      .result-body {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .result-header-line {
+        font-size: 11px;
+        color: #6b7280;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .result-header-line span.model {
+        color: #1d4ed8;
+        font-weight: 500;
+      }
+
+      .result-text {
+        white-space: pre-wrap;
+        line-height: 1.5;
+      }
+
+      .footer-row {
+        margin-top: 10px;
+        font-size: 11px;
+        color: #6b7280;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-row span.em {
+        color: #1d4ed8;
+      }
+
+      .footer-row a {
+        color: #4b5563;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          padding: 20px 12px 28px;
+        }
+
+        .shell {
+          padding: 20px 18px 20px;
+        }
+
+        .shell-inner {
+          padding: 16px 14px 16px;
+        }
+
+        .header-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+          padding: 16px 14px 14px;
+        }
+
+        .hero-main {
+          padding: 0;
+        }
+
+        .hero-cta-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero-aside {
+          margin-top: 6px;
+        }
+
+        .main-panel {
+          margin-top: 14px;
+          padding: 14px 12px 12px;
+        }
+
+        .prompt-input-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .ask-btn {
+          width: 100%;
+        }
+
+        .result-bubble {
+          max-height: 260px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .hero-title {
+          font-size: 22px;
+        }
+
+        .hero-body {
+          font-size: 13px;
+        }
+
+        .prompt-card-title {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="shell-inner">
+        <div class="header-row">
+          <div class="app-badge">
+            <div class="app-dot"></div>
+            <span>Sturdy Intro App</span>
+          </div>
+          <div class="header-pill">
+            <span>Early Preview</span>
+          </div>
+        </div>
+
+        <div class="hero">
+          <div class="hero-main">
+            <p class="hero-title">Ask for speed, get instant answers.</p>
+            <p class="hero-body">
+              This is an interactive prebuilt Sturdy scene: test prompts, see example answers.
+              <strong>For production integrations, drop this markup into your app and point to a real
+                Sturdy API.</strong>
+            </p>
+            <div class="hero-cta-row">
+              <a href="https://www.youtube.com/watch?v=lqAx2JcAUGI" target="_blank" rel="noopener noreferrer">
+                <button class="primary-cta-btn">
+                  <span class="icon">▶</span>
+                  <span>Hear Real Feedback</span>
+                </button>
+              </a>
+            </div>
+            <div class="hero-video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/lqAx2JcAUGI"
+                title="Hear real feedback from Sturdy customers"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+          <div class="hero-aside">
+            <div class="hero-aside-header">
+              <div class="hero-aside-pill">
+                <span class="hero-aside-pill-dot"></span>
+                <span>Live view</span>
+              </div>
+              <div class="hero-aside-label">Sturdy production prompt</div>
+            </div>
+            <div class="hero-aside-body">
+              <span>“What risks should I watch in Europe SMBs?”</span>
+              <span>— compliant, guardrailed sample response</span>
+            </div>
+            <div class="hero-aside-footer">
+              Routing through: <span>Sturdy EU-West</span>
+            </div>
+            <div class="hero-aside-orbit">
+              <div class="hero-aside-orbit-inner">
+                <div class="hero-aside-orbit-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-panel">
+          <div class="prompt-input-row">
+            <div class="prompt-input-wrapper">
+              <input id="customPrompt" class="prompt-input" type="text" placeholder="Or type a custom request" />
+              <div class="prompt-input-hint">Press <span>Return</span></div>
+            </div>
+            <button id="askBtn" class="ask-btn" disabled>
+              <span class="ask-btn-icon">⚡</span>
+              <span>Ask</span>
+            </button>
+          </div>
+
+          <div class="category-row" id="categoryRow"></div>
+          <div class="prompt-list" id="promptList"></div>
+          <div id="thinkingRow" class="thinking-row" aria-live="polite">
+            <div class="thinking-label">Thinking</div>
+            <div class="thinking-dots">
+              <span class="thinking-dot"></span>
+              <span class="thinking-dot"></span>
+              <span class="thinking-dot"></span>
+            </div>
+          </div>
+          <div id="resultShell" class="result-shell">
+            <div class="result-bubble">
+              <div class="result-avatar"></div>
+              <div class="result-body">
+                <div class="result-header-line">
+                  <span>Answer</span>
+                  <span class="model">Sturdy Guardrails</span>
+                </div>
+                <div id="resultText" class="result-text"></div>
+              </div>
+            </div>
+            <div class="footer-row">
+              <span>Latency: <span class="em">~5s</span> • Sample response only</span>
+              <span><a href="https://sturdy.ai" target="_blank" rel="noopener noreferrer">Open Sturdy</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Configuration
+      const RESPONSE_DELAY = 5200; // ms
+
+      const categories = [
+        { id: "all", label: "All", count: 4 },
+        { id: "risk", label: "Risk", count: 2 },
+        { id: "racing", label: "Racing", count: 1 },
+        { id: "support", label: "Support", count: 1 }
+      ];
+
+      const prompts = [
+        {
+          id: "europe-risk",
+          category: "risk",
+          title: "Top risks in Europe SMBs",
+          body: "Scan for common risk exposures when underwriting SMBs in Europe",
+          footer: "Guardrails: PII safe • tone: neutral"
+        },
+        {
+          id: "claims",
+          category: "support",
+          title: "Claims: what to ask",
+          body: "What info should a claims agent collect in the first 3 minutes?",
+          footer: "Guardrails: compliant • tone: concise"
+        },
+        {
+          id: "racing",
+          category: "racing",
+          title: "F1 teaser",
+          body: "Compare Red Bull and Ferrari setups for Monza top speed",
+          footer: "Guardrails: light, friendly"
+        },
+        {
+          id: "threats",
+          category: "risk",
+          title: "Cyber threats: SMBs",
+          body: "What top cyber threats should SMBs watch in 2024?",
+          footer: "Guardrails: short list"
+        }
+      ];
+
+      const cannedResponses = {
+        "europe-risk": `Here are the recurring risk themes we see when underwriting EU SMBs:
+
+• Liquidity: thin cash buffers and delayed receivables stretch days-to-cash.
+• Supply chain: single-source vendors, weak alternates, long lead times.
+• Compliance: fragmented VAT rules, worker classification, and data residency.
+• Credit: concentrated customer base, limited collateral, reliance on short-term credit lines.
+• Operational: manual invoicing, weak access controls, infrequent backups.
+
+Mitigations: diversify vendors, enforce least privilege, add cash reserves, and monitor receivables weekly.`,
+        claims: `A claims agent should gather these within the first 3 minutes:
+
+• Who/what/when/where: parties involved, date/time, exact location.
+• Policy: policy number, coverage type, limits, exclusions flagged.
+• Incident: short narrative, photos/videos available, police/incident reports filed.
+• Damages/injuries: immediate injuries, property damage scope, third parties affected.
+• Dependencies: any emergency services contacted; remediation already started?
+
+Close by confirming next steps, documentation needs, and preferred contact channel.`,
+        racing: `For Monza top speed, teams tend to:
+
+• Aero: ultra-low downforce rear wing, trimmed beam wing, minimal gurney.
+• Power unit: aggressive engine modes in quali; cooling exits tightened (watch temps).
+• Suspension: lower rake, stiffer rear to keep stability through Variante Ascari exit.
+• Gearing: longer 7th/8th to optimize main straight Vmax.
+• Tyres: manage rear slip in Variante della Roggia to protect traction.
+
+Result: top speed gains but reduced grip through Lesmos—drivers manage lift-and-coast to keep rear temps in check.`,
+        threats: `Top 2024 SMB cyber threats (EU+US):
+
+• Phishing → business email compromise; deepfake-enabled invoice fraud.
+• Ransomware → lateral movement via unmanaged endpoints and weak MFA.
+• SaaS sprawl → ungoverned apps with excessive permissions; shadow data syncs.
+• Supply chain → compromised libraries, plugins, and third-party agents.
+• AI misuse → leaked prompts, model poisoning, exfil of embeddings.
+
+Mitigations: enforce MFA, restrict tokens, least privilege, dependency scanning, EDR on all endpoints, and verified backups.`
+      };
+
+      const promptListEl = document.getElementById("promptList");
+      const categoryRowEl = document.getElementById("categoryRow");
+      const customPromptEl = document.getElementById("customPrompt");
+      const askBtn = document.getElementById("askBtn");
+      const thinkingRow = document.getElementById("thinkingRow");
+      const resultShell = document.getElementById("resultShell");
+      const resultText = document.getElementById("resultText");
+
+      let selectedPromptId = null;
+      let typewriterTimeout = null;
+
+      function renderCategories() {
+        categoryRowEl.innerHTML = "";
+        categories.forEach((cat, idx) => {
+          const pill = document.createElement("button");
+          pill.className = `tab-pill ${idx === 0 ? "active" : ""}`;
+          pill.dataset.id = cat.id;
+          pill.innerHTML = `${cat.label} <span class="count">${cat.count}</span>`;
+          pill.addEventListener("click", () => {
+            document.querySelectorAll(".tab-pill").forEach((el) => el.classList.remove("active"));
+            pill.classList.add("active");
+            renderPrompts(cat.id === "all" ? null : cat.id);
+          });
+          categoryRowEl.appendChild(pill);
+        });
+      }
+
+      function renderPrompts(filterCategory = null) {
+        promptListEl.innerHTML = "";
+        const filtered = filterCategory
+          ? prompts.filter((p) => p.category === filterCategory)
+          : prompts;
+
+        filtered.forEach((prompt) => {
+          const card = document.createElement("div");
+          card.className = `prompt-card ${selectedPromptId === prompt.id ? "selected" : ""}`;
+          card.dataset.id = prompt.id;
+          card.innerHTML = `
+            <div class="prompt-card-title">${prompt.title}</div>
+            <div class="prompt-card-body">${prompt.body}</div>
+            <div class="prompt-card-footer">${prompt.footer}</div>
+            <div class="prompt-meta-row">
+              <span class="em">${prompt.category}</span>
+              <span class="example">Example prompt</span>
+            </div>
+          `;
+
+          card.addEventListener("click", () => {
+            selectedPromptId = prompt.id;
+            document.querySelectorAll(".prompt-card").forEach((el) => el.classList.remove("selected"));
+            card.classList.add("selected");
+            askBtn.disabled = false;
+            customPromptEl.value = "";
+          });
+
+          promptListEl.appendChild(card);
+        });
+      }
+
+      function setThinkingState(isThinking) {
+        thinkingRow.style.display = isThinking ? "flex" : "none";
+      }
+
+      function resetResult() {
+        resultShell.style.display = "none";
+        resultText.textContent = "";
+        if (typewriterTimeout) {
+          clearTimeout(typewriterTimeout);
+          typewriterTimeout = null;
+        }
+      }
+
+      function typewriterEffect(text, index = 0) {
+        if (index <= text.length) {
+          resultText.textContent = text.slice(0, index);
+          resultText.parentElement.scrollTop = resultText.parentElement.scrollHeight;
+          typewriterTimeout = setTimeout(() => typewriterEffect(text, index + 1), 12);
+        }
+      }
+
+      function showResult(answer) {
+        resultShell.style.display = "block";
+        resultText.textContent = "";
+        typewriterEffect(answer, 0);
+      }
+
+      function getAnswer() {
+        if (selectedPromptId) {
+          return cannedResponses[selectedPromptId] || "No response configured.";
+        }
+
+        const custom = customPromptEl.value.trim();
+        if (custom) {
+          return `Sample: ${custom}\n\nThis is a placeholder Sturdy answer. Replace cannedResponses or call your API.`;
+        }
+
+        return "No prompt selected.";
+      }
+
+      function handleAsk() {
+        promptListEl.style.display = "none";
+        document.getElementById("categoryRow").style.display = "none";
+        document.querySelector(".prompt-input-row").style.display = "none";
+        resetResult();
+        setThinkingState(true);
+        askBtn.disabled = true;
+
+        setTimeout(() => {
+          const answer = getAnswer();
+          setThinkingState(false);
+          showResult(answer);
+        }, RESPONSE_DELAY);
+      }
+
+      function init() {
+        renderCategories();
+        renderPrompts();
+
+        askBtn.addEventListener("click", handleAsk);
+
+        customPromptEl.addEventListener("input", () => {
+          const hasValue = customPromptEl.value.trim().length > 0;
+          selectedPromptId = null;
+          document.querySelectorAll(".prompt-card").forEach((el) => el.classList.remove("selected"));
+          askBtn.disabled = !hasValue;
+        });
+
+        customPromptEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !askBtn.disabled) {
+            handleAsk();
+          }
+        });
+      }
+
+      init();
+    </script>
+  </body>
+</html>
