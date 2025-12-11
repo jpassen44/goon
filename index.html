@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex Intro App</title>
+  <style>
+    :root {
+      --bg: #0b1021;
+      --panel: #0f172a;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22d3ee;
+      --accent-strong: #38bdf8;
+      --card-hover: rgba(56, 189, 248, 0.08);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      --bubble: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08), transparent 25%),
+        radial-gradient(circle at 80% 10%, rgba(168, 85, 247, 0.06), transparent 25%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 14px 48px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 960px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #f8fafc;
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.15);
+    }
+
+    .header-note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      background: linear-gradient(145deg, rgba(34, 211, 238, 0.08), rgba(168, 85, 247, 0.05));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-copy h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: #f8fafc;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #1e293b, #0ea5e9);
+      color: #e2e8f0;
+      border: 1px solid rgba(34, 211, 238, 0.6);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      box-shadow: 0 14px 36px rgba(34, 211, 238, 0.18);
+      transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(168, 85, 247, 0.08));
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 44px rgba(34, 211, 238, 0.26);
+    }
+
+    .cta-button:hover::after {
+      opacity: 1;
+    }
+
+    .cta-button:active {
+      transform: scale(0.985);
+    }
+
+    .cta-icon {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 18px rgba(0, 0, 0, 0.22);
+      flex-shrink: 0;
+    }
+
+    .cta-icon svg {
+      width: 12px;
+      height: 12px;
+      display: block;
+    }
+
+    .video-thumb {
+      position: relative;
+      width: 210px;
+      height: 120px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, #0f172a, #111827);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+      text-decoration: none;
+      transition: transform 0.14s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      display: block;
+    }
+
+    .video-thumb::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(34, 211, 238, 0.18), rgba(168, 85, 247, 0.08)),
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.08), transparent 55%),
+        url('data:image/svg+xml,%3Csvg width="400" height="240" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="400" height="240" fill="%23111a2e"/%3E%3Cpath d="M140 70h120v18H140z" fill="%2322d3ee" opacity="0.65"/%3E%3Cpath d="M140 102h80v12h-80z" fill="%23e5e7eb" opacity="0.6"/%3E%3Cpath d="M140 126h92v12h-92z" fill="%23e5e7eb" opacity="0.55"/%3E%3Ccircle cx="90" cy="120" r="38" fill="%230ea5e9" opacity="0.3"/%3E%3Ccircle cx="90" cy="120" r="26" fill="none" stroke="%2322d3ee" stroke-width="4" opacity="0.4"/%3E%3C/svg%3E');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.92;
+    }
+
+    .video-thumb:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 44px rgba(34, 211, 238, 0.28);
+      border-color: rgba(34, 211, 238, 0.35);
+    }
+
+    .video-thumb:active {
+      transform: scale(0.985);
+    }
+
+    .thumb-play {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .thumb-play span {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(226, 232, 240, 0.16);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+      display: grid;
+      place-items: center;
+      transition: transform 0.14s ease, box-shadow 0.2s ease;
+    }
+
+    .thumb-play span svg {
+      width: 18px;
+      height: 18px;
+      color: #e2e8f0;
+    }
+
+    .video-thumb:hover .thumb-play span {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 38px rgba(34, 211, 238, 0.28);
+    }
+
+    .prompt-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .prompt-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prompt-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.14), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .prompt-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: var(--card-hover);
+      transform: translateY(-2px);
+    }
+
+    .prompt-card:hover::after {
+      opacity: 1;
+    }
+
+    .prompt-card.selected {
+      border-color: var(--accent-strong);
+      box-shadow: 0 12px 40px rgba(34, 211, 238, 0.25);
+    }
+
+    .prompt-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #f8fafc;
+    }
+
+    .prompt-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .prompt-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .ask-button {
+      background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+      border: 1px solid rgba(34, 211, 238, 0.6);
+      color: #0b1021;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 14px 40px rgba(34, 211, 238, 0.28);
+      transition: transform 0.12s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      min-width: 120px;
+    }
+
+    .ask-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .ask-button:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 50px rgba(34, 211, 238, 0.35);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .thinking-state {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .thinking-label {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .dot-wave {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 14px;
+    }
+
+    .dot-wave span {
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d9f99d;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+
+    .dot-wave span:nth-child(2) { animation-delay: 0.15s; }
+    .dot-wave span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.8; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    .result-area {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-top: 6px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #22d3ee, #a855f7);
+      display: grid;
+      place-items: center;
+      color: #0b1021;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
+      flex-shrink: 0;
+    }
+
+    .bubble {
+      flex: 1;
+      background: var(--bubble);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      line-height: 1.6;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      min-height: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.12), transparent 40%);
+      opacity: 0.7;
+    }
+
+    .bubble-text {
+      position: relative;
+      z-index: 1;
+      white-space: pre-wrap;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .header-top { flex-direction: column; align-items: flex-start; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-actions { width: 100%; justify-content: flex-start; }
+      .video-thumb { width: 100%; max-width: 320px; margin-left: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .actions { width: 100%; }
+      .ask-button { width: 100%; text-align: center; }
+      .hero-copy h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header>
+      <div class="header-top">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          <span>Codex Intro</span>
+        </div>
+        <div class="header-note">Select a prompt and ask to see a sample response.</div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>Experience Sturdy in Action.</h1>
+          <p>Hear how teams ship faster with Sturdy, straight from the people using it every day.</p>
+        </div>
+        <div class="hero-actions">
+          <a
+            class="cta-button"
+            href="https://www.youtube.com/watch?v=lqAx2JcAUGI"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="cta-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2.75" y="6.25" width="18.5" height="11.5" rx="2.5" stroke="currentColor" stroke-width="1.5" />
+                <path d="M10.5 9.5L15 12L10.5 14.5V9.5Z" fill="currentColor" />
+              </svg>
+            </span>
+            <span>Hear what customers say</span>
+          </a>
+          <a
+            class="video-thumb"
+            href="https://www.youtube.com/watch?v=lqAx2JcAUGI"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Watch customer stories on YouTube"
+          >
+            <div class="thumb-play">
+              <span aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.5 8.5L16 12L9.5 15.5V8.5Z" fill="currentColor" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <section id="promptSection" class="prompt-area">
+      <div class="prompt-grid" id="promptGrid"></div>
+      <div class="prompt-footer" id="promptFooter">
+        <span>Pick a starter prompt and click Ask to generate a sample.</span>
+        <div class="actions">
+          <button id="askButton" class="ask-button" disabled>Ask</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="thinkingState" class="thinking-state hidden" aria-live="polite">
+      <div class="thinking-label">Thinking…</div>
+      <div class="dot-wave" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section id="resultSection" class="hidden">
+      <div class="result-area fade-in">
+        <div class="avatar" aria-hidden="true">AI</div>
+        <div class="bubble">
+          <div id="bubbleText" class="bubble-text"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const prompts = [
+      {
+        id: 'ai-help',
+        title: 'Summarize a concept',
+        description: 'Explain large language models like you would to a new teammate.'
+      },
+      {
+        id: 'build-plan',
+        title: 'Plan a feature',
+        description: 'Draft a short plan for launching a new in-product AI helper.'
+      },
+      {
+        id: 'rewrite',
+        title: 'Rewrite for clarity',
+        description: 'Polish a rough paragraph into a crisp, friendly note.'
+      },
+      {
+        id: 'data',
+        title: 'Data quality checklist',
+        description: 'List quick checks before shipping an analytics dashboard.'
+      }
+    ];
+
+    const answers = {
+      'ai-help': `Large language models (LLMs) are pattern finders trained on text. They predict likely next words, which lets them answer questions, rewrite content, and follow instructions. Key takeaways:\n\n• They don’t “know” facts—they generate based on patterns.\n• Prompts that give context and constraints produce the best results.\n• They can draft, summarize, and transform text at speed, but humans should review important outputs.\n• Guardrails (validation, moderation, fallbacks) keep UX safe and reliable.`,
+      'build-plan': `Here’s a lightweight plan:\n\n1) Define success: pick 1–2 measurable workflows (e.g., generate replies).\n2) Guardrails: set boundaries for tone, safety, and data handling.\n3) UX: provide starter prompts, visible loading states, and an edit/resubmit loop.\n4) Evaluation: create a 20–30 item prompt set and track accuracy, tone, and latency.\n5) Launch: start with a beta, gather quick feedback, then harden reliability before widening access.`,
+      'rewrite': `Original: “We might be able to get this done soon.”\n\nClarity pass: “We expect to finish by Thursday. I’ll post an update if the timeline changes.”`,
+      'data': `Quick data quality checks:\n\n• Verify source freshness and time zones.\n• Confirm metric definitions match docs.\n• Compare sample values against known benchmarks.\n• Add graceful empty/error states in the UI.\n• Log unusual spikes or dips for follow-up.`
+    };
+
+    const promptGrid = document.getElementById('promptGrid');
+    const askButton = document.getElementById('askButton');
+    const promptSection = document.getElementById('promptSection');
+    const promptFooter = document.getElementById('promptFooter');
+    const thinkingState = document.getElementById('thinkingState');
+    const resultSection = document.getElementById('resultSection');
+    const bubbleText = document.getElementById('bubbleText');
+
+    let selectedPrompt = null;
+    let typingTimer = null;
+
+    function renderPrompts() {
+      promptGrid.innerHTML = '';
+      prompts.forEach((prompt) => {
+        const card = document.createElement('article');
+        card.className = 'prompt-card';
+        card.tabIndex = 0;
+        card.setAttribute('data-id', prompt.id);
+        card.innerHTML = `
+          <div class="prompt-title">${prompt.title}</div>
+          <div class="prompt-desc">${prompt.description}</div>
+        `;
+
+        card.addEventListener('click', () => selectPrompt(prompt.id));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectPrompt(prompt.id);
+          }
+        });
+
+        promptGrid.appendChild(card);
+      });
+    }
+
+    function selectPrompt(id) {
+      selectedPrompt = id;
+      askButton.disabled = false;
+      document.querySelectorAll('.prompt-card').forEach((card) => {
+        card.classList.toggle('selected', card.getAttribute('data-id') === id);
+      });
+    }
+
+    function showThinkingState() {
+      promptSection.classList.add('hidden');
+      thinkingState.classList.remove('hidden');
+      resultSection.classList.add('hidden');
+    }
+
+    function showResult(text) {
+      thinkingState.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      bubbleText.textContent = '';
+      typeText(text);
+    }
+
+    function typeText(text) {
+      const chars = [...text];
+      const totalChars = chars.length;
+      const interval = 22;
+      let index = 0;
+
+      clearInterval(typingTimer);
+      typingTimer = setInterval(() => {
+        bubbleText.textContent += chars[index];
+        index += 1;
+        bubbleText.parentElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        if (index >= totalChars) {
+          clearInterval(typingTimer);
+        }
+      }, interval);
+    }
+
+    askButton.addEventListener('click', () => {
+      if (!selectedPrompt) return;
+      showThinkingState();
+      const delay = 5200 + Math.random() * 700; // 5-6 seconds range
+      setTimeout(() => {
+        showResult(answers[selectedPrompt]);
+      }, delay);
+    });
+
+    renderPrompts();
+  </script>
+</body>
+</html>
