@@ -897,7 +897,7 @@
           <div class="category-row" id="categoryRow"></div>
           <div class="prompt-list" id="promptList"></div>
           <div id="thinkingRow" class="thinking-row" aria-live="polite">
-            <div class="thinking-label">Thinking...</div>
+            <div class="thinking-label">Thinking</div>
             <div class="thinking-dots">
               <span class="thinking-dot"></span>
               <span class="thinking-dot"></span>
@@ -1105,17 +1105,17 @@ Mitigations: enforce MFA, restrict tokens, least privilege, dependency scanning,
       }
 
       function handleAsk() {
-        const answer = getAnswer();
         promptListEl.style.display = "none";
         document.getElementById("categoryRow").style.display = "none";
         document.querySelector(".prompt-input-row").style.display = "none";
         resetResult();
         setThinkingState(true);
+        askBtn.disabled = true;
 
         setTimeout(() => {
+          const answer = getAnswer();
           setThinkingState(false);
           showResult(answer);
-          askBtn.disabled = true;
         }, RESPONSE_DELAY);
       }
 
